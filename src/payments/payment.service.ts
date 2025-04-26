@@ -7,18 +7,21 @@ import { PaymentResponseDto } from './dto/payment-response.dto';
 export class PaymentsService {
   constructor(private readonly asaas: AsaasService) {}
 
-  create(dto: CreatePaymentDto): Promise<PaymentResponseDto> {
-    const payload: any = {
-      customer: dto.customerId,
-      billingType: dto.billingType,
-      value: dto.value,
-      dueDate: dto.dueDate,
-    };
-    if (dto.installmentCount && dto.installmentCount > 1) {
-      payload.installmentCount = dto.installmentCount;
-      payload.totalValue = dto.totalValue;
+  async create(dto: CreatePaymentDto): Promise<PaymentResponseDto> {
+    if (!dto.customerId) {
+      throw new Error('O campo customerId é obrigatório.');
     }
-    return this.asaas.request<PaymentResponseDto>('post', '/payments', payload);
+    if (!dto.billingType) {
+      throw new Error('O campo billingType é obrigatório.');
+    }
+    if (dto.value === undefined || dto.value === null) {
+      throw new Error('O campo value é obrigatório.');
+    }
+    if (!dto.dueDate) {
+      throw new Error('O campo dueDate é obrigatório.');
+    }
+
+    return this.asaas.request<PaymentResponseDto>('post', '/payments', dto);
   }
 
   findInstallments(installmentId: string) {
