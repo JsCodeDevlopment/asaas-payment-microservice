@@ -100,10 +100,10 @@ payment/
    ASAAS_API_KEY=<sua_chave_api>
    ASAAS_BASE_URL=https://sandbox.asaas.com/api/v3
 
-   SWAGGER_PATH=api
    SWAGGER_TITLE=Microserviço de Pagamentos Asaas
-   SWAGGER_DESCRIPTION=Documentação interativa gerada pelo Swagger
-   SWAGGER_VERSION=1.0
+   SWAGGER_DESCRIPTION=Microserviço desenvolvido em NestJS que encapsula toda a integração com a API do Asaas
+   SWAGGER_VERSION=1.0.0
+   SWAGGER_PATH=docs
 
    PORT=3000
    ```
@@ -117,7 +117,7 @@ payment/
 5. **Acesse a documentação**
    Abra no navegador:
    ````
-   http://localhost:8000/api
+   http://localhost:8000/docs
    ````
 
 ---
