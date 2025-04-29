@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ListCustomersResponseDto } from 'src/customers/dto/list-customers-response.dto';
 import { FilterCustomerDto } from 'src/customers/types/get-customers-filters.type';
+import { EnvironmentOptionsType } from 'src/types/environment.enum';
+import { RequestMethodsEnum } from 'src/types/request-methods.enum';
 import { AsaasService } from '../asaas/asaas.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerResponseDto } from './dto/customer-response.dto';
@@ -9,11 +11,25 @@ import { CustomerResponseDto } from './dto/customer-response.dto';
 export class CustomersService {
   constructor(private readonly asaas: AsaasService) {}
 
-  create(dto: CreateCustomerDto): Promise<CustomerResponseDto> {
-    return this.asaas.request<CustomerResponseDto>('post', '/customers', dto);
+  create(
+    dto: CreateCustomerDto,
+    token: string,
+    environment: EnvironmentOptionsType = 'SANDBOX',
+  ): Promise<CustomerResponseDto> {
+    return this.asaas.request<CustomerResponseDto, CreateCustomerDto>(
+      RequestMethodsEnum.POST,
+      '/customers',
+      dto,
+      token,
+      environment,
+    );
   }
 
-  async getAll(filters?: FilterCustomerDto): Promise<ListCustomersResponseDto> {
+  async getAll(
+    token: string,
+    filters?: FilterCustomerDto,
+    environment: EnvironmentOptionsType = 'SANDBOX',
+  ): Promise<ListCustomersResponseDto> {
     const query = new URLSearchParams();
 
     if (filters) {
@@ -36,6 +52,12 @@ export class CustomersService {
     }
 
     const path = query.toString() ? `/customers?${query}` : '/customers';
-    return this.asaas.request<ListCustomersResponseDto>('get', path);
+    return this.asaas.request<ListCustomersResponseDto>(
+      RequestMethodsEnum.GET,
+      path,
+      undefined,
+      token,
+      environment,
+    );
   }
 }
