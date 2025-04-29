@@ -1,18 +1,48 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
+import { EnvironmentOptionsType } from 'src/types/environment.enum';
+import { RequestMethodsType } from 'src/types/request-methods.enum';
+import { AsaasConfig } from '../config/asaas.config';
 
 @Injectable()
 export class AsaasService {
-  constructor(private readonly http: HttpService) {}
+  private cfg: AsaasConfig;
 
-  request<T>(method: 'get' | 'post' | 'put', path: string, body?: any) {
-    const call =
-      method === 'get'
-        ? this.http.get<T>(path)
-        : method === 'post'
-          ? this.http.post<T>(path, body)
-          : this.http.put<T>(path, body);
-    return lastValueFrom(call).then((res) => res.data);
+  constructor(
+    private readonly http: HttpService,
+    private readonly configService: ConfigService,
+  ) {
+    const config = this.configService.get<AsaasConfig>('asaas');
+    if (!config) {
+      throw new Error('Asaas configuration not found');
+    }
+    this.cfg = config;
+  }
+
+  async request<T, Y = undefined>(
+    method: RequestMethodsType,
+    path: string,
+    body: Y,
+    accessToken: string,
+    environment: EnvironmentOptionsType = 'SANDBOX',
+  ): Promise<T> {
+    const baseURL =
+      environment === 'PROD' ? this.cfg.baseUrl : this.cfg.sandboxUrl;
+
+    const response = await lastValueFrom(
+      this.http.request<T>({
+        method,
+        url: path,
+        data: body,
+        baseURL,
+        headers: {
+          'Content-Type': 'application/json',
+          access_token: accessToken,
+        },
+      }),
+    );
+    return response.data;
   }
 }
