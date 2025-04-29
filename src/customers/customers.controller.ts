@@ -1,7 +1,14 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Headers, Post, Query } from '@nestjs/common';
+import {
+  ApiHeader,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ListCustomersResponseDto } from 'src/customers/dto/list-customers-response.dto';
 import { FilterCustomerDto } from 'src/customers/types/get-customers-filters.type';
+import { EnvironmentOptionsType } from 'src/types/environment.enum';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerResponseDto } from './dto/customer-response.dto';
@@ -22,8 +29,24 @@ export class CustomersController {
     status: 401,
     description: 'Não autorizado',
   })
-  create(@Body() dto: CreateCustomerDto): Promise<CustomerResponseDto> {
-    return this.svc.create(dto);
+  @ApiHeader({
+    name: 'access_token',
+    description: 'API Key do Asaas para autenticação',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'environment',
+    enum: ['SANDBOX', 'PROD'],
+    description: 'Escolhe o ambiente Asaas (SANDBOX ou PROD)',
+    required: false,
+    example: 'SANDBOX',
+  })
+  create(
+    @Body() dto: CreateCustomerDto,
+    @Headers('access_token') token: string,
+    @Query('environment') environment: EnvironmentOptionsType,
+  ): Promise<CustomerResponseDto> {
+    return this.svc.create(dto, token, environment);
   }
 
   @Get()
@@ -31,6 +54,18 @@ export class CustomersController {
     summary: 'Lista clientes com filtro opcional de nome ou CPF/CNPJ',
     description:
       'Retorna todos os clientes, podendo filtrar por nome ou CPF/CNPJ.',
+  })
+  @ApiHeader({
+    name: 'access_token',
+    description: 'API Key do Asaas para autenticação',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'environment',
+    enum: ['SANDBOX', 'PROD'],
+    description: 'Escolhe o ambiente Asaas (SANDBOX ou PROD)',
+    required: false,
+    example: 'SANDBOX',
   })
   @ApiQuery({
     name: 'name',
@@ -72,7 +107,9 @@ export class CustomersController {
   })
   findAll(
     @Query() filters: FilterCustomerDto,
+    @Headers('access_token') token: string,
+    @Query('environment') environment?: EnvironmentOptionsType,
   ): Promise<ListCustomersResponseDto> {
-    return this.svc.getAll(filters);
+    return this.svc.getAll(token, filters, environment);
   }
 }
