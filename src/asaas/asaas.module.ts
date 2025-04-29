@@ -17,7 +17,13 @@ export class AsaasModule {
           inject: [ConfigService],
           useFactory: (cs: ConfigService): HttpModuleOptions => {
             const cfg = cs.get<AsaasConfig>('asaas');
-            if (!cfg?.baseUrl || !cfg?.apiKey) {
+            // if (!cfg?.baseUrl || !cfg?.apiKey) {
+            //   console.error('Asaas config missing:', cfg);
+            //   throw new Error(
+            //     'Asaas configuration is incomplete. Check baseUrl and apiKey.',
+            //   );
+            // }
+            if (!cfg?.baseUrl) {
               console.error('Asaas config missing:', cfg);
               throw new Error(
                 'Asaas configuration is incomplete. Check baseUrl and apiKey.',
@@ -26,7 +32,6 @@ export class AsaasModule {
             return {
               baseURL: cfg.baseUrl,
               maxRedirects: 0,
-              headers: { access_token: cfg.apiKey },
               timeout: 5000,
             };
           },
