@@ -3,6 +3,8 @@ import { ConfigModule } from '@nestjs/config';
 
 import asaasConfig from './config/asaas.config';
 
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { CustomersModule } from 'src/customers/customers.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
 import { PaymentLinksModule } from 'src/payment-links/payment-links.module';
@@ -15,6 +17,10 @@ import { AsaasModule } from './asaas/asaas.module';
       isGlobal: true,
       load: [asaasConfig],
       envFilePath: ['.env'],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      exclude: ['/api*'],
     }),
     AsaasModule.registerAsync(),
     CustomersModule,
