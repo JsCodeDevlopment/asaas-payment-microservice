@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentação - Payment Gateway Microservice Asaas</title>
+    <style>
+      body {
+        display: flex;
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+        min-height: 100vh;
+      }
+      nav {
+        width: 230px;
+        background: #222e3a;
+        color: #fff;
+        padding: 2rem 1.5rem;
+        height: 100dvh;
+        box-sizing: border-box;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+      }
+      nav h2 {
+        margin-top: 0;
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+        margin-bottom: 2rem;
+      }
+      nav a {
+        display: block;
+        margin-bottom: 1rem;
+        text-decoration: none;
+        color: #cfd8dc;
+        font-weight: 500;
+        transition: color 0.2s;
+        border-left: 3px solid transparent;
+        padding-left: 0.5rem;
+      }
+      nav a:hover {
+        color: #fff;
+        border-left: 3px solid #4f8cff;
+        background: rgba(79, 140, 255, 0.07);
+        border-radius: 4px;
+      }
+      main {
+        flex: 1;
+        padding: 3rem 4rem;
+        max-width: 900px;
+        margin: 2rem auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 2.2rem;
+        color: #222e3a;
+      }
+      .subtitle {
+        color: #4f8cff;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+      }
+      ul.features {
+        margin: 2rem 0 2rem 1.5rem;
+        padding: 0;
+        color: #333;
+      }
+      ul.features li {
+        margin-bottom: 0.7rem;
+        font-size: 1.05rem;
+      }
+      .info-box {
+        background: #f4f8ff;
+        border-left: 4px solid #4f8cff;
+        padding: 1rem 1.5rem;
+        border-radius: 6px;
+        margin-bottom: 2rem;
+        color: #234;
+      }
+      @media (max-width: 900px) {
+        body {
+          flex-direction: column;
+        }
+        nav {
+          width: 100%;
+          height: auto;
+          box-shadow: none;
+          border-radius: 0 0 12px 12px;
+        }
+        main {
+          margin: 1rem;
+          padding: 2rem 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <h2>Documentação</h2>
+      <a
+        href="/"
+        style="
+          display: inline-block;
+          margin-bottom: 2rem;
+          background: #4f8cff;
+          color: #fff;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          font-weight: 600;
+          text-align: center;
+        "
+        >← Voltar ao Início</a
+      >
+      <a href="/documentation/index.html">Boas Vindas</a>
+      <a href="/documentation/introduction.html">Introdução</a>
+      <a href="/documentation/customers.html">Clientes</a>
+      <a href="/documentation/payments.html">Pagamentos</a>
+      <a href="/documentation/notifications.html">Notificações</a>
+    </nav>
+    <main>
+      <h1>Bem-vindo à Documentação</h1>
+      <div class="subtitle">Payment Gateway Microservice Asaas</div>
+      <div class="info-box">
+        Esta documentação tem como objetivo orientar desenvolvedores na
+        integração e utilização do microserviço de gateway de pagamentos baseado
+        na plataforma Asaas.
+      </div>
+      <h2>O que você encontra aqui?</h2>
+      <ul class="features">
+        <li>Visão geral da arquitetura do microserviço</li>
+        <li>Como cadastrar e gerenciar clientes</li>
+        <li>Processamento e acompanhamento de pagamentos</li>
+        <li>Configuração de notificações automáticas</li>
+        <li>Exemplos de requisições e respostas</li>
+        <li>Boas práticas de segurança e autenticação</li>
+      </ul>
+      <h2>Como começar?</h2>
+      <p>
+        Utilize o menu lateral para navegar entre as seções. Recomendamos
+        iniciar pela <strong>Introdução</strong> para entender os conceitos
+        principais e requisitos de integração.
+      </p>
+      <h2>Suporte</h2>
+      <p>
+        Em caso de dúvidas ou problemas, consulte a seção de
+        <strong>Notificações</strong> ou entre em contato com a equipe de
+        desenvolvimento.
+      </p>
+    </main>
+  </body>
+</html>

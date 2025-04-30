@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Gateway Microservice Asaas</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        width: 100%;
+        background: #222e3a;
+        color: #fff;
+        padding: 1.2rem 2rem;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        gap: 1.5rem;
+      }
+      header a {
+        color: #cfd8dc;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.05rem;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        transition:
+          background 0.2s,
+          color 0.2s;
+      }
+      header a:hover {
+        background: #4f8cff;
+        color: #fff;
+      }
+      main {
+        flex: 1;
+        padding: 3rem 4rem;
+        max-width: 900px;
+        margin: 2rem auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 2.2rem;
+        color: #222e3a;
+      }
+      .subtitle {
+        color: #4f8cff;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+      }
+      ul.features {
+        margin: 2rem 0 2rem 1.5rem;
+        padding: 0;
+        color: #333;
+      }
+      ul.features li {
+        margin-bottom: 0.7rem;
+        font-size: 1.05rem;
+      }
+      .info-box {
+        background: #f4f8ff;
+        border-left: 4px solid #4f8cff;
+        padding: 1rem 1.5rem;
+        border-radius: 6px;
+        margin-bottom: 2rem;
+        color: #234;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 2rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        border-bottom: 1px solid #e0e7ef;
+        padding: 0.7rem 1rem;
+        text-align: left;
+      }
+      th {
+        background: #e0e7ef;
+        color: #222e3a;
+        font-weight: 600;
+      }
+      code {
+        background: #f4f8ff;
+        color: #222e3a;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 1em;
+      }
+      pre {
+        background: #f4f8ff;
+        padding: 1rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 1em;
+        margin-bottom: 2rem;
+      }
+      footer {
+        text-align: center;
+        padding: 1rem;
+        background-color: #c5c5c5;
+        margin-top: 2rem;
+        border-radius: 0 0 12px 12px;
+        color: #234;
+      }
+      @media (max-width: 900px) {
+        main {
+          margin: 1rem;
+          padding: 2rem 1rem;
+        }
+        header {
+          flex-direction: column;
+          align-items: flex-end;
+          padding: 1rem;
+          gap: 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="/documentation/index.html">Documentação</a>
+      <a href="/docs">Swagger</a>
+    </header>
+    <main>
+      <h1>Bem-vindo ao Payment Gateway Microservice Asaas</h1>
+      <div class="subtitle">
+        Microserviço para integração com a API do Asaas — rápido, seguro e
+        flexível.
+      </div>
+      <div class="info-box">
+        Esta solução permite gerenciar clientes, cobranças, pagamentos e
+        notificações de forma centralizada, com suporte a múltiplos ambientes
+        (sandbox e produção) e múltiplos tenants. Ideal para empresas que
+        desejam automatizar processos financeiros e integrar facilmente com o
+        Asaas.
+      </div>
+      <h2>Principais Recursos</h2>
+      <ul class="features">
+        <li>Cadastro, consulta e atualização de clientes</li>
+        <li>Emissão e acompanhamento de cobranças e pagamentos</li>
+        <li>Geração de links de pagamento</li>
+        <li>Recebimento de notificações automáticas via webhooks</li>
+        <li>Ambiente de testes (sandbox) e produção</li>
+        <li>Documentação interativa via Swagger</li>
+        <li>Paginação e filtros avançados nas consultas</li>
+        <li>Suporte a múltiplos tenants (multi-empresa)</li>
+      </ul>
+      <h2>Como Utilizar?</h2>
+      <div class="info-box">
+        Utilize o menu no topo para navegar entre as seções da documentação.
+        Recomendamos iniciar pela <strong>Introdução</strong> para entender os
+        conceitos principais e requisitos de integração.
+      </div>
+      <h2>Exemplo de Requisição</h2>
+      <pre><code>GET /api/customers?env=sandbox
+Headers:
+  access_token: SUA_CHAVE_DE_ACESSO</code></pre>
+      <h2>Tecnologias Utilizadas</h2>
+      <table>
+        <tr>
+          <th>Tecnologia</th>
+          <th>Descrição</th>
+        </tr>
+        <tr>
+          <td>Node.js &amp; NestJS</td>
+          <td>Backend robusto e escalável para APIs</td>
+        </tr>
+        <tr>
+          <td>Swagger</td>
+          <td>Documentação interativa dos endpoints</td>
+        </tr>
+        <tr>
+          <td>Axios</td>
+          <td>Requisições HTTP performáticas</td>
+        </tr>
+        <tr>
+          <td>TypeScript</td>
+          <td>Tipagem estática e maior segurança no código</td>
+        </tr>
+      </table>
+      <h2>Boas Práticas</h2>
+      <ul class="features">
+        <li>
+          Mantenha seu <code>access_token</code> seguro e nunca compartilhe
+          publicamente.
+        </li>
+        <li>Utilize sempre HTTPS para comunicação com a API.</li>
+        <li>Implemente tratamento de erros para respostas inesperadas.</li>
+        <li>Consulte a documentação Swagger para exemplos detalhados.</li>
+      </ul>
+      <h2>Desenvolvedor</h2>
+      <div class="info-box">
+        Desenvolvido por <strong>Jonatas</strong>.<br />
+        GitHub:
+        <a href="https://github.com/JsCodeDevlopment" target="_blank"
+          >https://github.com/JsCodeDevlopment</a
+        >
+      </div>
+    </main>
+    <footer>
+      <p>
+        &copy; <span id="year"></span> Jonatas. Todos os direitos reservados.
+      </p>
+      <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+      </script>
+    </footer>
+  </body>
+</html>

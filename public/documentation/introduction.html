@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentação - Payment Gateway Microservice Asaas</title>
+    <style>
+      body {
+        display: flex;
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+        min-height: 100vh;
+      }
+      nav {
+        width: 230px;
+        background: #222e3a;
+        color: #fff;
+        padding: 2rem 1.5rem;
+        height: 100vh;
+        box-sizing: border-box;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+      }
+      nav h2 {
+        margin-top: 0;
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+        margin-bottom: 2rem;
+      }
+      nav a {
+        display: block;
+        margin-bottom: 1rem;
+        text-decoration: none;
+        color: #cfd8dc;
+        font-weight: 500;
+        transition: color 0.2s;
+        border-left: 3px solid transparent;
+        padding-left: 0.5rem;
+      }
+      nav a:hover {
+        color: #fff;
+        border-left: 3px solid #4f8cff;
+        background: rgba(79, 140, 255, 0.07);
+        border-radius: 4px;
+      }
+      main {
+        flex: 1;
+        padding: 3rem 4rem;
+        max-width: 900px;
+        margin: 2rem auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 2.2rem;
+        color: #222e3a;
+      }
+      .subtitle {
+        color: #4f8cff;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+      }
+      ul.features {
+        margin: 2rem 0 2rem 1.5rem;
+        padding: 0;
+        color: #333;
+      }
+      ul.features li {
+        margin-bottom: 0.7rem;
+        font-size: 1.05rem;
+      }
+      .info-box {
+        background: #f4f8ff;
+        border-left: 4px solid #4f8cff;
+        padding: 1rem 1.5rem;
+        border-radius: 6px;
+        margin-bottom: 2rem;
+        color: #234;
+      }
+      @media (max-width: 900px) {
+        body {
+          flex-direction: column;
+        }
+        nav {
+          width: 100%;
+          height: auto;
+          box-shadow: none;
+          border-radius: 0 0 12px 12px;
+        }
+        main {
+          margin: 1rem;
+          padding: 2rem 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <h2>Documentação</h2>
+      <a
+        href="/"
+        style="
+          display: inline-block;
+          margin-bottom: 2rem;
+          background: #4f8cff;
+          color: #fff;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          font-weight: 600;
+          text-align: center;
+        "
+        >← Voltar ao Início</a
+      >
+      <a href="/documentation/index.html">Boas Vindas</a>
+      <a href="/documentation/introduction.html">Introdução</a>
+      <a href="/documentation/customers.html">Clientes</a>
+      <a href="/documentation/payments.html">Pagamentos</a>
+      <a href="/documentation/notifications.html">Notificações</a>
+    </nav>
+    <main>
+      <h1>Introdução</h1>
+      <div class="subtitle">
+        Primeiros passos com o Payment Gateway Microservice Asaas
+      </div>
+      <div class="info-box">
+        Esta API permite a integração com o serviço Asaas para gerenciamento de
+        clientes e pagamentos, oferecendo endpoints seguros e flexíveis para
+        facilitar a automação financeira do seu negócio.
+      </div>
+      <h2>Autenticação</h2>
+      <p>
+        Todas as requisições devem incluir o header
+        <code>access_token</code> com a chave de acesso fornecida pelo Asaas.
+      </p>
+      <ul class="features">
+        <li>O token deve ser enviado em todas as chamadas à API.</li>
+        <li>
+          Tokens possuem permissões específicas, verifique com o administrador
+          do sistema.
+        </li>
+      </ul>
+      <h2>Ambientes</h2>
+      <p>
+        Utilize o parâmetro de query <code>?env=sandbox</code> ou
+        <code>?env=prod</code> para selecionar o ambiente desejado.
+      </p>
+      <ul class="features">
+        <li>
+          <strong>Sandbox:</strong> Ambiente de testes, sem impacto financeiro
+          real.
+        </li>
+        <li><strong>Produção:</strong> Ambiente real, utilize com cautela.</li>
+      </ul>
+      <h2>Principais Recursos</h2>
+      <ul class="features">
+        <li>Cadastro e gerenciamento de clientes</li>
+        <li>Emissão e acompanhamento de cobranças</li>
+        <li>Recebimento de notificações automáticas</li>
+        <li>Consulta de status de pagamentos</li>
+        <li>Relatórios e exportação de dados</li>
+      </ul>
+      <h2>Exemplo de Requisição</h2>
+      <div class="info-box">
+        <pre style="margin: 0"><code>GET /api/customers?env=sandbox
+Headers:
+  access_token: SUA_CHAVE_DE_ACESSO</code></pre>
+      </div>
+      <h2>Boas Práticas</h2>
+      <ul class="features">
+        <li>
+          Mantenha seu <code>access_token</code> seguro e nunca compartilhe
+          publicamente.
+        </li>
+        <li>Utilize sempre HTTPS para comunicação com a API.</li>
+        <li>Implemente tratamento de erros para respostas inesperadas.</li>
+      </ul>
+      <h2>Próximos Passos</h2>
+      <p>
+        Continue a leitura para detalhes sobre endpoints, exemplos de uso e
+        dicas de integração nas próximas seções da documentação.
+      </p>
+    </main>
+  </body>
+</html>

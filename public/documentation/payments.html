@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentação - Payment Gateway Microservice Asaas</title>
+    <style>
+      body {
+        display: flex;
+        margin: 0;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
+        min-height: 100vh;
+      }
+      nav {
+        width: 230px;
+        background: #222e3a;
+        color: #fff;
+        padding: 2rem 1.5rem;
+        height: 100vh;
+        box-sizing: border-box;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+      }
+      nav h2 {
+        margin-top: 0;
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+        margin-bottom: 2rem;
+      }
+      nav a {
+        display: block;
+        margin-bottom: 1rem;
+        text-decoration: none;
+        color: #cfd8dc;
+        font-weight: 500;
+        transition: color 0.2s;
+        border-left: 3px solid transparent;
+        padding-left: 0.5rem;
+      }
+      nav a:hover {
+        color: #fff;
+        border-left: 3px solid #4f8cff;
+        background: rgba(79, 140, 255, 0.07);
+        border-radius: 4px;
+      }
+      main {
+        flex: 1;
+        padding: 3rem 4rem;
+        max-width: 900px;
+        margin: 2rem auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 2.2rem;
+        color: #222e3a;
+      }
+      .subtitle {
+        color: #4f8cff;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+      }
+      ul.features {
+        margin: 2rem 0 2rem 1.5rem;
+        padding: 0;
+        color: #333;
+      }
+      ul.features li {
+        margin-bottom: 0.7rem;
+        font-size: 1.05rem;
+      }
+      .info-box {
+        background: #f4f8ff;
+        border-left: 4px solid #4f8cff;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 6px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+        background: #f8fafc;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid #e0e7ef;
+        text-align: left;
+      }
+      th {
+        background: #e0e7ef;
+        color: #222e3a;
+        font-weight: 600;
+      }
+      code {
+        background: #f4f8ff;
+        color: #222e3a;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 1em;
+      }
+      pre {
+        background: #f4f8ff;
+        padding: 1rem;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 1em;
+        margin-bottom: 2rem;
+      }
+      @media (max-width: 900px) {
+        main {
+          padding: 1.5rem 0.5rem;
+          margin: 0.5rem;
+        }
+        nav {
+          width: 100px;
+          padding: 1rem 0.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <h2>Documentação</h2>
+      <a
+        href="/"
+        style="
+          display: inline-block;
+          margin-bottom: 2rem;
+          background: #4f8cff;
+          color: #fff;
+          padding: 0.5rem 1rem;
+          border-radius: 5px;
+          font-weight: 600;
+          text-align: center;
+        "
+        >← Voltar ao Início</a
+      >
+      <a href="/documentation/index.html">Boas Vindas</a>
+      <a href="/documentation/introduction.html">Introdução</a>
+      <a href="/documentation/customers.html">Clientes</a>
+      <a href="/documentation/payments.html">Pagamentos</a>
+      <a href="/documentation/notifications.html">Notificações</a>
+    </nav>
+    <main>
+      <h1>Pagamentos</h1>
+      <div class="subtitle">Gerencie cobranças e pagamentos de clientes.</div>
+
+      <!-- CRIAR COBRANÇA -->
+      <h2>Criar Cobrança</h2>
+      <div class="info-box">
+        <strong>Método:</strong> <code>POST /payments</code><br />
+        Cria uma nova cobrança para um cliente.
+      </div>
+      <h3>Body (JSON)</h3>
+      <table>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+          <th>Obrigatório</th>
+        </tr>
+        <tr>
+          <td><code>customerId</code></td>
+          <td>string</td>
+          <td>ID do cliente que irá receber a cobrança</td>
+          <td>Sim</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>number</td>
+          <td>
+            Valor da cobrança individual de cada parcela (caso
+            <code>totalValue</code> não seja informado) ou valor base para
+            cálculo das parcelas
+          </td>
+          <td>Sim</td>
+        </tr>
+        <tr>
+          <td><code>dueDate</code></td>
+          <td>string</td>
+          <td>
+            Data de vencimento da cobrança ou da primeira parcela (YYYY-MM-DD)
+          </td>
+          <td>Sim</td>
+        </tr>
+        <tr>
+          <td><code>billingType</code></td>
+          <td>string</td>
+          <td>
+            Tipo de cobrança: <code>BOLETO</code>, <code>CREDIT_CARD</code> ou
+            <code>PIX</code>
+          </td>
+          <td>Sim</td>
+        </tr>
+        <tr>
+          <td><code>totalValue</code></td>
+          <td>number</td>
+          <td>
+            Valor total da cobrança. Se preenchido, o valor de cada parcela será
+            calculado automaticamente considerando <code>value</code> e
+            <code>totalValue</code>.
+          </td>
+          <td>Não</td>
+        </tr>
+      </table>
+      <h3>Headers</h3>
+      <ul class="features">
+        <li>
+          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
+        </li>
+      </ul>
+      <h3>Parâmetros de Query</h3>
+      <ul class="features">
+        <li>
+          <code>environment</code> (opcional): <code>SANDBOX</code> ou
+          <code>PROD</code>
+        </li>
+      </ul>
+      <h3>Exemplo de Requisição</h3>
+      <pre><code>POST /payments?environment=SANDBOX
+Headers:
+  access_token: SUA_CHAVE_DE_ACESSO
+Body:
+{
+  "customerId": "cus_123456789",
+  "billingType": "BOLETO",
+  "value": 100.00,
+  "dueDate": "2025-05-10"
+}</code></pre>
+      <h3>Exemplo de Resposta</h3>
+      <pre><code>{
+  "id": "pay_987654321",
+  "status": "PENDING",
+  "dueDate": "2025-05-10",
+  "value": 100.00
+}</code></pre>
+
+      <!-- LISTAR PARCELAS DE UM PLANO -->
+      <h2>Listar Parcelas de um Plano</h2>
+      <div class="info-box">
+        <strong>Método:</strong> <code>GET /payments/installments/:id</code
+        ><br />
+        Lista todas as parcelas de um plano de pagamento.
+      </div>
+      <h3>Headers</h3>
+      <ul class="features">
+        <li>
+          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
+        </li>
+      </ul>
+      <h3>Parâmetros de Query</h3>
+      <ul class="features">
+        <li>
+          <code>environment</code> (opcional): <code>SANDBOX</code> ou
+          <code>PROD</code>
+        </li>
+      </ul>
+      <h3>Exemplo de Requisição</h3>
+      <pre><code>GET /payments/installments/inst_123456789?environment=SANDBOX
+Headers:
+  access_token: SUA_CHAVE_DE_ACESSO</code></pre>
+      <h3>Exemplo de Resposta</h3>
+      <pre><code>{
+  "data": [
+    {
+      "id": "pay_987654321",
+      "status": "PENDING",
+      "dueDate": "2025-05-10",
+      "value": 100.00
+    }
+  ],
+  "totalCount": 1
+}</code></pre>
+
+      <!-- CAMPOS DE RESPOSTA -->
+      <h2>Campos de Resposta</h2>
+      <table>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+        </tr>
+        <tr>
+          <td><code>id</code></td>
+          <td>string</td>
+          <td>ID único da cobrança</td>
+        </tr>
+        <tr>
+          <td><code>status</code></td>
+          <td>string</td>
+          <td>
+            Status da cobrança (<code>PENDING</code>, <code>RECEIVED</code>,
+            etc.)
+          </td>
+        </tr>
+        <tr>
+          <td><code>dueDate</code></td>
+          <td>string</td>
+          <td>Data de vencimento</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>number</td>
+          <td>Valor da cobrança</td>
+        </tr>
+      </table>
+
+      <h2>Observações</h2>
+      <ul class="features">
+        <li>
+          O header <code>access_token</code> é obrigatório em todas as rotas de
+          pagamentos.
+        </li>
+        <li>
+          O parâmetro <code>environment</code> define se a operação será feita
+          em <strong>SANDBOX</strong> (teste) ou
+          <strong>PROD</strong> (produção). Se não informado, o padrão é
+          <code>SANDBOX</code>.
+        </li>
+        <li>
+          Todos os campos obrigatórios devem ser preenchidos para criar uma
+          cobrança.
+        </li>
+      </ul>
+    </main>
+  </body>
+</html>
