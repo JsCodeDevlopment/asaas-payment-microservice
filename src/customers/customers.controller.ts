@@ -9,6 +9,7 @@ import {
 import { ListCustomersResponseDto } from 'src/customers/dto/list-customers-response.dto';
 import { FilterCustomerDto } from 'src/customers/types/get-customers-filters.type';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
+import { ErrorResponse } from 'src/types/error-response.type';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerResponseDto } from './dto/customer-response.dto';
@@ -45,7 +46,7 @@ export class CustomersController {
     @Body() dto: CreateCustomerDto,
     @Headers('access_token') token: string,
     @Query('environment') environment: EnvironmentOptionsType,
-  ): Promise<CustomerResponseDto> {
+  ): Promise<CustomerResponseDto | ErrorResponse> {
     return this.svc.create(dto, token, environment);
   }
 
@@ -109,7 +110,7 @@ export class CustomersController {
     @Query() filters: FilterCustomerDto,
     @Headers('access_token') token: string,
     @Query('environment') environment?: EnvironmentOptionsType,
-  ): Promise<ListCustomersResponseDto> {
+  ): Promise<ListCustomersResponseDto | ErrorResponse> {
     return this.svc.getAll(token, filters, environment);
   }
 }
