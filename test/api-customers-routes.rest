@@ -1,0 +1,19 @@
+POST http://localhost:8000/customers?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+
+{
+  "name": "John Doe",
+  "cpfCnpj": "161.009.670-30",
+  "email": "john@example.com",
+  "phone": "+5511999998888",
+  "address": "Rua Exemplo",
+  "addressNumber": "51",
+  "province": "Bairro Exemplo",
+  "postalCode": "63100000"
+}
+
+###
+
+GET http://localhost:8000/customers?environment=SANDBOX
+Content-Type: application/json
