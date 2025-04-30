@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { AxiosError } from 'axios';
+import { formatError } from 'src/helpers/format-error.helper';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
+import { ErrorResponse } from 'src/types/error-response.type';
 import { RequestMethodsEnum } from 'src/types/request-methods.enum';
 import { AsaasService } from '../asaas/asaas.service';
 import { CreatePaymentLinkDto } from './dto/create-payment-link.dto';
@@ -9,44 +12,56 @@ import { PaymentLinkResponseDto } from './dto/payment-link-response.dto';
 export class PaymentLinksService {
   constructor(private readonly asaas: AsaasService) {}
 
-  create(
+  async create(
     dto: CreatePaymentLinkDto,
     token: string,
     environment: EnvironmentOptionsType = 'SANDBOX',
-  ): Promise<PaymentLinkResponseDto> {
-    return this.asaas.request<PaymentLinkResponseDto, CreatePaymentLinkDto>(
-      RequestMethodsEnum.POST,
-      '/paymentLinks',
-      dto,
-      token,
-      environment,
-    );
+  ): Promise<PaymentLinkResponseDto | ErrorResponse> {
+    try {
+      return await this.asaas.request<
+        PaymentLinkResponseDto,
+        CreatePaymentLinkDto
+      >(RequestMethodsEnum.POST, '/paymentLinks', dto, token, environment);
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return formatError(axiosError);
+    }
   }
 
-  findAll(
+  async findAll(
     token: string,
     environment: EnvironmentOptionsType = 'SANDBOX',
-  ): Promise<PaymentLinkResponseDto[]> {
-    return this.asaas.request<PaymentLinkResponseDto[], undefined>(
-      RequestMethodsEnum.GET,
-      '/paymentLinks',
-      undefined,
-      token,
-      environment,
-    );
+  ): Promise<PaymentLinkResponseDto[] | ErrorResponse> {
+    try {
+      return await this.asaas.request<PaymentLinkResponseDto[], undefined>(
+        RequestMethodsEnum.GET,
+        '/paymentLinks',
+        undefined,
+        token,
+        environment,
+      );
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return formatError(axiosError);
+    }
   }
 
-  findOne(
+  async findOne(
     id: string,
     token: string,
     environment: EnvironmentOptionsType = 'SANDBOX',
-  ): Promise<PaymentLinkResponseDto> {
-    return this.asaas.request<PaymentLinkResponseDto, undefined>(
-      RequestMethodsEnum.GET,
-      `/paymentLinks/${id}`,
-      undefined,
-      token,
-      environment,
-    );
+  ): Promise<PaymentLinkResponseDto | ErrorResponse> {
+    try {
+      return await this.asaas.request<PaymentLinkResponseDto, undefined>(
+        RequestMethodsEnum.GET,
+        `/paymentLinks/${id}`,
+        undefined,
+        token,
+        environment,
+      );
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return formatError(axiosError);
+    }
   }
 }
