@@ -15,7 +15,7 @@ export class PaymentLinksService {
   async create(
     dto: CreatePaymentLinkDto,
     token: string,
-    environment: EnvironmentOptionsType = 'SANDBOX',
+    environment: EnvironmentOptionsType = 'PROD',
   ): Promise<PaymentLinkResponseDto | ErrorResponse> {
     try {
       return await this.asaas.request<
@@ -30,7 +30,7 @@ export class PaymentLinksService {
 
   async findAll(
     token: string,
-    environment: EnvironmentOptionsType = 'SANDBOX',
+    environment: EnvironmentOptionsType = 'PROD',
   ): Promise<PaymentLinkResponseDto[] | ErrorResponse> {
     try {
       return await this.asaas.request<PaymentLinkResponseDto[], undefined>(
@@ -49,7 +49,7 @@ export class PaymentLinksService {
   async findOne(
     id: string,
     token: string,
-    environment: EnvironmentOptionsType = 'SANDBOX',
+    environment: EnvironmentOptionsType = 'PROD',
   ): Promise<PaymentLinkResponseDto | ErrorResponse> {
     try {
       return await this.asaas.request<PaymentLinkResponseDto, undefined>(
