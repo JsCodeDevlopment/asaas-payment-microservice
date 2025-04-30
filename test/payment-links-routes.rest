@@ -1,0 +1,19 @@
+POST http://localhost:8000/payment-links?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+
+{
+  "name": "Jonatas Silva",
+  "description": "Comprando um produto de $70.000.000,00 #SQN",
+  "value": 100,
+  "billingType": "CREDIT_CARD",
+  "chargeType": "INSTALLMENT",
+  "dueDateLimitDays": 10,
+  "maxInstallmentCount": 10
+}
+
+###
+
+GET http://localhost:8000/payment-links?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
