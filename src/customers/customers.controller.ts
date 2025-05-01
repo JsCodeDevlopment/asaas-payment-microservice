@@ -8,8 +8,8 @@ import {
 } from '@nestjs/swagger';
 import { ListCustomersResponseDto } from 'src/customers/dto/list-customers-response.dto';
 import { FilterCustomerDto } from 'src/customers/types/get-customers-filters.type';
+import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
-import { ErrorResponse } from 'src/types/error-response.type';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerResponseDto } from './dto/customer-response.dto';
@@ -29,6 +29,7 @@ export class CustomersController {
   @ApiResponse({
     status: 401,
     description: 'Não autorizado',
+    type: ErrorResponseDto,
   })
   @ApiHeader({
     name: 'access_token',
@@ -46,7 +47,7 @@ export class CustomersController {
     @Body() dto: CreateCustomerDto,
     @Headers('access_token') token: string,
     @Query('environment') environment: EnvironmentOptionsType,
-  ): Promise<CustomerResponseDto | ErrorResponse> {
+  ): Promise<CustomerResponseDto | ErrorResponseDto> {
     return this.svc.create(dto, token, environment);
   }
 
@@ -105,12 +106,13 @@ export class CustomersController {
   @ApiResponse({
     status: 401,
     description: 'Não autorizado',
+    type: ErrorResponseDto,
   })
   findAll(
     @Query() filters: FilterCustomerDto,
     @Headers('access_token') token: string,
     @Query('environment') environment?: EnvironmentOptionsType,
-  ): Promise<ListCustomersResponseDto | ErrorResponse> {
+  ): Promise<ListCustomersResponseDto | ErrorResponseDto> {
     return this.svc.getAll(token, filters, environment);
   }
 }
