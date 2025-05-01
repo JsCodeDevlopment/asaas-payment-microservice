@@ -15,7 +15,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { CreateCreditCardPaymentDto } from 'src/payments/dto/create-credit-card-payment.dto';
+import { CreditCardPaymentResponseDto } from 'src/payments/dto/credit-card-payment-response.dto';
 import { ListPaymentsResponseDto } from 'src/payments/dto/list-payments-response.dto';
+import { PixInfoResponseDto } from 'src/payments/dto/pix-info-response.dto';
 import { PaymentsService } from 'src/payments/payment.service';
 import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { SuccessResponseDto } from 'src/types/dto/success-response.dto';
@@ -73,6 +76,74 @@ export class PaymentsController {
     @Query('environment') environment: EnvironmentOptionsType,
   ): Promise<PaymentResponseDto | ErrorResponseDto> {
     return this.svc.create(dto, token, environment);
+  }
+
+  @Post('credit-card')
+  @ApiOperation({ summary: 'Cria uma nova cobrança via cartão de crédito' })
+  @ApiResponse({
+    status: 201,
+    description: 'Cobrança criada com sucesso.',
+    type: CreditCardPaymentResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Campos obrigatórios ausentes ou inválidos.',
+    type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: 'access_token',
+    description: 'API Key do Asaas para autenticação',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'environment',
+    enum: ['SANDBOX', 'PROD'],
+    description: 'Escolhe o ambiente Asaas (SANDBOX ou PROD)',
+    required: false,
+    example: 'SANDBOX',
+  })
+  createCreditCardPayment(
+    @Body()
+    dto: CreateCreditCardPaymentDto,
+    @Headers('access_token') token: string,
+    @Query('environment') environment: EnvironmentOptionsType,
+  ): Promise<CreditCardPaymentResponseDto | ErrorResponseDto> {
+    return this.svc.createCreditCardPayment(dto, token, environment);
+  }
+
+  @Get(':id/pix-info')
+  @ApiOperation({
+    summary:
+      'Obtém informações do PIX (QR Code e Copia e Cola) para uma cobrança',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Informações do PIX retornadas com sucesso.',
+    type: PixInfoResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'O campo id é obrigatório.',
+    type: ErrorResponseDto,
+  })
+  @ApiHeader({
+    name: 'access_token',
+    description: 'API Key do Asaas para autenticação',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'environment',
+    enum: ['SANDBOX', 'PROD'],
+    description: 'Escolhe o ambiente Asaas (SANDBOX ou PROD)',
+    required: false,
+    example: 'SANDBOX',
+  })
+  getPixInfo(
+    @Param('id') id: string,
+    @Headers('access_token') token: string,
+    @Query('environment') environment: EnvironmentOptionsType,
+  ): Promise<PixInfoResponseDto | ErrorResponseDto> {
+    return this.svc.getPixInfo(id, token, environment);
   }
 
   @Get()
