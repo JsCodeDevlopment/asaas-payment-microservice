@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { BillingType } from 'src/types/billing-type.enum';
 
 export class CreatePaymentDto {
   @ApiProperty({
     description: 'ID do cliente que irá receber a cobrança',
   })
-  customerId: string;
+  customer: string;
 
   @ApiProperty({
     example: 100.0,
@@ -23,12 +24,18 @@ export class CreatePaymentDto {
     example: 'BOLETO',
     description: 'Tipo de cobrança: BOLETO, CREDIT_CARD ou PIX',
   })
-  billingType: 'BOLETO' | 'CREDIT_CARD' | 'PIX';
+  billingType: BillingType;
+
+  @ApiProperty({
+    required: false,
+    description: 'Número de parcelas (somente no caso de cobrança parcelada)',
+  })
+  installmentCount?: number;
 
   @ApiProperty({
     required: false,
     description:
-      'Valor total da cobrança. Se preenchido, o valor de cada parcela será calculado automaticamente considerando value e totalValue.',
+      'Informe o valor total de uma cobrança que será parcelada (somente no caso de cobrança parcelada). Caso enviado este campo o installmentValue não é necessário, o cálculo por parcela será automático.',
   })
   totalValue?: number;
 }
