@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
-import { ErrorResponse } from 'src/types/error-response.type';
+import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 
-export function formatError(error: AxiosError): ErrorResponse {
+export function formatError(error: AxiosError): ErrorResponseDto {
   let code = 500;
   let message = 'Internal server error';
 
