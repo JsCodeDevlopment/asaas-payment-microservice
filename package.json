@@ -1,11 +1,12 @@
 {
   "name": "payment-gateway-microservice-asaas",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Microserviço desenvolvido em NestJS que encapsula toda a integração com a API do Asaas",
+  "author": "Jonatas Silva",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
