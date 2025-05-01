@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { formatError } from 'src/helpers/format-error.helper';
+import { CreateCreditCardPaymentDto } from 'src/payments/dto/create-credit-card-payment.dto';
 import { ListPaymentsResponseDto } from 'src/payments/dto/list-payments-response.dto';
+import { PixInfoResponseDto } from 'src/payments/dto/pix-info-response.dto';
 import { ListPaymentsFilters } from 'src/payments/types/get-payments-filters.type';
 import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { SuccessResponseDto } from 'src/types/dto/success-response.dto';
@@ -41,6 +43,76 @@ export class PaymentsService {
         token,
         environment,
       );
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return formatError(axiosError);
+    }
+  }
+
+  async createCreditCardPayment(
+    dto: CreateCreditCardPaymentDto,
+    token: string,
+    environment: EnvironmentOptionsType = 'PROD',
+  ): Promise<PaymentResponseDto | ErrorResponseDto> {
+    try {
+      if (!dto.customer) {
+        throw new Error('O campo customer é obrigatório.');
+      }
+      if (!dto.value && !dto.totalValue) {
+        throw new Error('O campo value ou totalValue é obrigatório.');
+      }
+      if (!dto.dueDate) {
+        throw new Error('O campo dueDate é obrigatório.');
+      }
+      if (!dto.creditCard) {
+        throw new Error('Os dados do cartão de crédito são obrigatórios.');
+      }
+      if (!dto.creditCardHolderInfo) {
+        throw new Error(
+          'As informações do titular do cartão são obrigatórias.',
+        );
+      }
+      if (!dto.remoteIp) {
+        throw new Error('O campo remoteIp é obrigatório.');
+      }
+
+      return await this.asaas.request<
+        PaymentResponseDto,
+        CreateCreditCardPaymentDto & { billingType: string }
+      >(
+        RequestMethodsEnum.POST,
+        '/payments',
+        { ...dto, billingType: 'CREDIT_CARD' },
+        token,
+        environment,
+      );
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      return formatError(axiosError);
+    }
+  }
+
+  async getPixInfo(
+    paymentId: string,
+    token: string,
+    environment: EnvironmentOptionsType = 'PROD',
+  ): Promise<PixInfoResponseDto | ErrorResponseDto> {
+    try {
+      if (!paymentId) {
+        return {
+          code: 400,
+          message: 'O campo paymentId é obrigatório.',
+        };
+      }
+
+      const response = await this.asaas.request<PixInfoResponseDto, undefined>(
+        RequestMethodsEnum.GET,
+        `/payments/${paymentId}/pixQrCode`,
+        undefined,
+        token,
+        environment,
+      );
+      return response;
     } catch (error) {
       const axiosError = error as AxiosError;
       return formatError(axiosError);
