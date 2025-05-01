@@ -11,7 +11,43 @@ access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3
 }
 
 ###
+POST http://localhost:8000/payments/credit-card?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+
+{
+  "customer": "cus_000006671674",
+  "value": 0,
+  "dueDate": "2025-05-01",
+  "installmentCount": 2,
+  "totalValue": 100,
+  "creditCard": {
+    "holderName": "John Doe",
+    "number": "4242424242424242",
+    "expiryMonth": "4",
+    "expiryYear": "2025",
+    "ccv": "123"
+  },
+  "creditCardHolderInfo": {
+    "name": "John Doe",
+    "email": "john.doe@asaas.com",
+    "cpfCnpj": "12345678901",
+    "postalCode": "12345678",
+    "addressNumber": "123",
+    "addressComplement": null,
+    "phone": null,
+    "mobilePhone": null
+  },
+  "remoteIp": "1b67:5bcb:f9da:0e6f:bc5a:5a9c:b299:b66a"
+}
+
+###
 GET http://localhost:8000/payments?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+
+###
+GET http://localhost:8000/payments/pay_4vyqs3ra7dq3z954/pix-info?environment=SANDBOX
 Content-Type: application/json
 access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
 
