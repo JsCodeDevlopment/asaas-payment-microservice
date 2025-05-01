@@ -26,7 +26,8 @@ export class AsaasService {
     path: string,
     body: Y,
     accessToken: string,
-    environment: EnvironmentOptionsType = 'SANDBOX',
+    environment: EnvironmentOptionsType = 'PROD',
+    params?: any,
   ): Promise<T> {
     const baseURL =
       environment === 'PROD' ? this.cfg.baseUrl : this.cfg.sandboxUrl;
@@ -40,6 +41,9 @@ export class AsaasService {
         headers: {
           'Content-Type': 'application/json',
           access_token: accessToken,
+        },
+        params: {
+          ...params,
         },
       }),
     );
