@@ -3,8 +3,8 @@ import { AxiosError } from 'axios';
 import { ListCustomersResponseDto } from 'src/customers/dto/list-customers-response.dto';
 import { FilterCustomerDto } from 'src/customers/types/get-customers-filters.type';
 import { formatError } from 'src/helpers/format-error.helper';
+import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
-import { ErrorResponse } from 'src/types/error-response.type';
 import { RequestMethodsEnum } from 'src/types/request-methods.enum';
 import { AsaasService } from '../asaas/asaas.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -18,7 +18,7 @@ export class CustomersService {
     dto: CreateCustomerDto,
     token: string,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<CustomerResponseDto | ErrorResponse> {
+  ): Promise<CustomerResponseDto | ErrorResponseDto> {
     try {
       return await this.asaas.request<CustomerResponseDto, CreateCustomerDto>(
         RequestMethodsEnum.POST,
@@ -37,36 +37,15 @@ export class CustomersService {
     token: string,
     filters?: FilterCustomerDto,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<ListCustomersResponseDto | ErrorResponse> {
+  ): Promise<ListCustomersResponseDto | ErrorResponseDto> {
     try {
-      const query = new URLSearchParams();
-
-      if (filters) {
-        const params: Record<string, string | number> = {
-          ...(filters.name && { name: filters.name }),
-          ...(filters.cpfCnpj && { cpfCnpj: filters.cpfCnpj }),
-          limit:
-            filters.limit !== undefined && filters.limit !== null
-              ? filters.limit
-              : 10,
-          offset:
-            filters.offset !== undefined && filters.offset !== null
-              ? filters.offset
-              : 0,
-        };
-
-        Object.entries(params).forEach(([key, value]) => {
-          query.append(key, value.toString());
-        });
-      }
-
-      const path = query.toString() ? `/customers?${query}` : '/customers';
       return await this.asaas.request<ListCustomersResponseDto>(
         RequestMethodsEnum.GET,
-        path,
+        '/customers',
         undefined,
         token,
         environment,
+        filters,
       );
     } catch (error) {
       const axiosError = error as AxiosError;
