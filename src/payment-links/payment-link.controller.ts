@@ -8,8 +8,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
-import { ErrorResponse } from 'src/types/error-response.type';
 import { CreatePaymentLinkDto } from './dto/create-payment-link.dto';
 import { PaymentLinkResponseDto } from './dto/payment-link-response.dto';
 import { PaymentLinksService } from './payment-links.service';
@@ -37,7 +37,7 @@ export class PaymentLinksController {
     @Body() dto: CreatePaymentLinkDto,
     @Headers('access_token') token: string,
     @Query('enviroment') environment: EnvironmentOptionsType,
-  ): Promise<PaymentLinkResponseDto | ErrorResponse> {
+  ): Promise<PaymentLinkResponseDto | ErrorResponseDto> {
     return this.svc.create(dto, token, environment);
   }
 
@@ -58,7 +58,7 @@ export class PaymentLinksController {
   findAll(
     @Headers('access_token') token: string,
     @Query('enviroment') environment: EnvironmentOptionsType,
-  ): Promise<PaymentLinkResponseDto[] | ErrorResponse> {
+  ): Promise<PaymentLinkResponseDto[] | ErrorResponseDto> {
     return this.svc.findAll(token, environment);
   }
 
@@ -80,7 +80,7 @@ export class PaymentLinksController {
     @Param('id') id: string,
     @Headers('access_token') token: string,
     @Query('enviroment') environment: EnvironmentOptionsType,
-  ): Promise<PaymentLinkResponseDto | ErrorResponse> {
+  ): Promise<PaymentLinkResponseDto | ErrorResponseDto> {
     return this.svc.findOne(id, token, environment);
   }
 }

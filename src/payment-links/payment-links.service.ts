@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { formatError } from 'src/helpers/format-error.helper';
+import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
-import { ErrorResponse } from 'src/types/error-response.type';
 import { RequestMethodsEnum } from 'src/types/request-methods.enum';
 import { AsaasService } from '../asaas/asaas.service';
 import { CreatePaymentLinkDto } from './dto/create-payment-link.dto';
@@ -16,7 +16,7 @@ export class PaymentLinksService {
     dto: CreatePaymentLinkDto,
     token: string,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<PaymentLinkResponseDto | ErrorResponse> {
+  ): Promise<PaymentLinkResponseDto | ErrorResponseDto> {
     try {
       return await this.asaas.request<
         PaymentLinkResponseDto,
@@ -31,7 +31,7 @@ export class PaymentLinksService {
   async findAll(
     token: string,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<PaymentLinkResponseDto[] | ErrorResponse> {
+  ): Promise<PaymentLinkResponseDto[] | ErrorResponseDto> {
     try {
       return await this.asaas.request<PaymentLinkResponseDto[], undefined>(
         RequestMethodsEnum.GET,
@@ -50,7 +50,7 @@ export class PaymentLinksService {
     id: string,
     token: string,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<PaymentLinkResponseDto | ErrorResponse> {
+  ): Promise<PaymentLinkResponseDto | ErrorResponseDto> {
     try {
       return await this.asaas.request<PaymentLinkResponseDto, undefined>(
         RequestMethodsEnum.GET,
