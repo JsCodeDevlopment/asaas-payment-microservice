@@ -151,11 +151,11 @@
       <h1>Pagamentos</h1>
       <div class="subtitle">Gerencie cobranças e pagamentos de clientes.</div>
 
-      <!-- CRIAR COBRANÇA -->
-      <h2>Criar Cobrança</h2>
+      <!-- CRIAR COBRANÇA (BOLETO/PIX) -->
+      <h2>Criar Cobrança (Boleto/Pix)</h2>
       <div class="info-box">
         <strong>Método:</strong> <code>POST /payments</code><br />
-        Cria uma nova cobrança para um cliente.
+        Cria uma nova cobrança para um cliente via <b>Boleto</b> ou <b>Pix</b>.
       </div>
       <h3>Body (JSON)</h3>
       <table>
@@ -166,7 +166,7 @@
           <th>Obrigatório</th>
         </tr>
         <tr>
-          <td><code>customerId</code></td>
+          <td><code>customer</code></td>
           <td>string</td>
           <td>ID do cliente que irá receber a cobrança</td>
           <td>Sim</td>
@@ -174,38 +174,25 @@
         <tr>
           <td><code>value</code></td>
           <td>number</td>
-          <td>
-            Valor da cobrança individual de cada parcela (caso
-            <code>totalValue</code> não seja informado) ou valor base para
-            cálculo das parcelas
-          </td>
+          <td>Valor da cobrança individual</td>
           <td>Sim</td>
         </tr>
         <tr>
           <td><code>dueDate</code></td>
           <td>string</td>
-          <td>
-            Data de vencimento da cobrança ou da primeira parcela (YYYY-MM-DD)
-          </td>
+          <td>Data de vencimento da cobrança (YYYY-MM-DD)</td>
           <td>Sim</td>
         </tr>
         <tr>
           <td><code>billingType</code></td>
           <td>string</td>
-          <td>
-            Tipo de cobrança: <code>BOLETO</code>, <code>CREDIT_CARD</code> ou
-            <code>PIX</code>
-          </td>
+          <td>Tipo de cobrança: <code>BOLETO</code> ou <code>PIX</code></td>
           <td>Sim</td>
         </tr>
         <tr>
           <td><code>totalValue</code></td>
           <td>number</td>
-          <td>
-            Valor total da cobrança. Se preenchido, o valor de cada parcela será
-            calculado automaticamente considerando <code>value</code> e
-            <code>totalValue</code>.
-          </td>
+          <td>Valor total da cobrança (opcional)</td>
           <td>Não</td>
         </tr>
       </table>
@@ -224,29 +211,195 @@
       </ul>
       <h3>Exemplo de Requisição</h3>
       <pre><code>POST /payments?environment=SANDBOX
-Headers:
-  access_token: SUA_CHAVE_DE_ACESSO
-Body:
-{
-  "customerId": "cus_123456789",
-  "billingType": "BOLETO",
-  "value": 100.00,
-  "dueDate": "2025-05-10"
-}</code></pre>
+  Headers:
+    access_token: SUA_CHAVE_DE_ACESSO
+  Body:
+  {
+    "customer": "cus_000006671674",
+    "value": 100,
+    "dueDate": "2025-05-01",
+    "billingType": "BOLETO",
+    "totalValue": 0
+  }</code></pre>
       <h3>Exemplo de Resposta</h3>
       <pre><code>{
-  "id": "pay_987654321",
-  "status": "PENDING",
-  "dueDate": "2025-05-10",
-  "value": 100.00
-}</code></pre>
+    "id": "pay_987654321",
+    "status": "PENDING",
+    "dueDate": "2025-05-01",
+    "value": 100.00,
+    "billingType": "BOLETO"
+  }</code></pre>
 
-      <!-- LISTAR PARCELAS DE UM PLANO -->
-      <h2>Listar Parcelas de um Plano</h2>
+      <!-- CRIAR COBRANÇA CARTÃO DE CRÉDITO -->
+      <h2>Criar Cobrança Cartão de Crédito</h2>
       <div class="info-box">
-        <strong>Método:</strong> <code>GET /payments/installments/:id</code
-        ><br />
-        Lista todas as parcelas de um plano de pagamento.
+        <strong>Método:</strong> <code>POST /payments/credit-card</code><br />
+        Cria uma nova cobrança para um cliente via <b>Cartão de Crédito</b>.
+      </div>
+      <h3>Body (JSON)</h3>
+      <table>
+        <tr>
+          <th>Campo</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+          <th>Obrigatório</th>
+        </tr>
+        <tr>
+          <td><code>customer</code></td>
+          <td>string</td>
+          <td>ID do cliente</td>
+          <td>Sim</td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>number</td>
+          <td>Valor da cobrança individual (ou use <code>totalValue</code>)</td>
+          <td>Sim*</td>
+        </tr>
+        <tr>
+          <td><code>dueDate</code></td>
+          <td>string</td>
+          <td>Data de vencimento (YYYY-MM-DD)</td>
+          <td>Sim</td>
+        </tr>
+        <tr>
+          <td><code>installmentCount</code></td>
+          <td>number</td>
+          <td>Número de parcelas (opcional)</td>
+          <td>Não</td>
+        </tr>
+        <tr>
+          <td><code>totalValue</code></td>
+          <td>number</td>
+          <td>Valor total da cobrança (opcional)</td>
+          <td>Sim*</td>
+        </tr>
+        <tr>
+          <td><code>creditCard</code></td>
+          <td>object</td>
+          <td>Dados do cartão de crédito</td>
+          <td>Sim</td>
+        </tr>
+        <tr>
+          <td><code>creditCardHolderInfo</code></td>
+          <td>object</td>
+          <td>Informações do titular do cartão</td>
+          <td>Sim</td>
+        </tr>
+        <tr>
+          <td><code>remoteIp</code></td>
+          <td>string</td>
+          <td>IP do cliente</td>
+          <td>Sim</td>
+        </tr>
+      </table>
+      <h3>Headers</h3>
+      <ul class="features">
+        <li>
+          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
+        </li>
+      </ul>
+      <h3>Parâmetros de Query</h3>
+      <ul class="features">
+        <li>
+          <code>environment</code> (opcional): <code>SANDBOX</code> ou
+          <code>PROD</code>
+        </li>
+      </ul>
+      <h3>Exemplo de Requisição</h3>
+      <pre><code>POST /payments/credit-card?environment=SANDBOX
+  Headers:
+    access_token: SUA_CHAVE_DE_ACESSO
+  Body:
+  {
+    "customer": "cus_000006671674",
+    "value": 0,
+    "dueDate": "2025-05-01",
+    "installmentCount": 2,
+    "totalValue": 100,
+    "creditCard": {
+    "holderName": "John Doe",
+    "number": "4242424242424242",
+    "expiryMonth": "4",
+    "expiryYear": "2025",
+    "ccv": "123"
+    },
+    "creditCardHolderInfo": {
+    "name": "John Doe",
+    "email": "john.doe@asaas.com",
+    "cpfCnpj": "12345678901",
+    "postalCode": "12345678",
+    "addressNumber": "123",
+    "addressComplement": null,
+    "phone": null,
+    "mobilePhone": null
+    },
+    "remoteIp": "1b67:5bcb:f9da:0e6f:bc5a:5a9c:b299:b66a"
+  }</code></pre>
+      <h3>Exemplo de Resposta</h3>
+      <pre><code>{
+    "id": "pay_abcdef123456",
+    "status": "PENDING",
+    "dueDate": "2025-05-01",
+    "value": 50.00,
+    "billingType": "CREDIT_CARD",
+    "installmentCount": 2
+  }</code></pre>
+
+      <!-- LISTAR COBRANÇAS -->
+      <h2>Listar Cobranças</h2>
+      <div class="info-box">
+        <strong>Método:</strong> <code>GET /payments</code><br />
+        Lista todas as cobranças cadastradas.
+      </div>
+      <h3>Headers</h3>
+      <ul class="features">
+        <li>
+          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
+        </li>
+      </ul>
+      <h3>Parâmetros de Query</h3>
+      <ul class="features">
+        <li>
+          <code>environment</code> (opcional): <code>SANDBOX</code> ou
+          <code>PROD</code>
+        </li>
+        <li>
+          <code>installment</code> (opcional): ID do parcelamento para filtrar
+          cobranças
+        </li>
+        <li><code>offset</code> (opcional): Elemento inicial da lista</li>
+        <li>
+          <code>limit</code> (opcional): Número de elementos da lista (máx: 100)
+        </li>
+        <li>
+          <code>customerId</code> (opcional): ID do cliente para filtrar
+          cobranças
+        </li>
+      </ul>
+      <h3>Exemplo de Requisição</h3>
+      <pre><code>GET /payments?environment=SANDBOX&amp;limit=10
+  Headers:
+    access_token: SUA_CHAVE_DE_ACESSO</code></pre>
+      <h3>Exemplo de Resposta</h3>
+      <pre><code>{
+    "data": [
+    {
+      "id": "pay_987654321",
+      "status": "PENDING",
+      "dueDate": "2025-05-10",
+      "value": 100.00,
+      "billingType": "BOLETO"
+    }
+    ],
+    "totalCount": 1
+  }</code></pre>
+
+      <!-- OBTER INFORMAÇÕES PIX -->
+      <h2>Obter Informações do PIX</h2>
+      <div class="info-box">
+        <strong>Método:</strong> <code>GET /payments/:id/pix-info</code><br />
+        Obtém informações do PIX (QR Code e Copia e Cola) para uma cobrança.
       </div>
       <h3>Headers</h3>
       <ul class="features">
@@ -262,21 +415,44 @@ Body:
         </li>
       </ul>
       <h3>Exemplo de Requisição</h3>
-      <pre><code>GET /payments/installments/inst_123456789?environment=SANDBOX
-Headers:
-  access_token: SUA_CHAVE_DE_ACESSO</code></pre>
+      <pre><code>GET /payments/pay_4vyqs3ra7dq3z954/pix-info?environment=SANDBOX
+  Headers:
+    access_token: SUA_CHAVE_DE_ACESSO</code></pre>
       <h3>Exemplo de Resposta</h3>
       <pre><code>{
-  "data": [
-    {
-      "id": "pay_987654321",
-      "status": "PENDING",
-      "dueDate": "2025-05-10",
-      "value": 100.00
-    }
-  ],
-  "totalCount": 1
-}</code></pre>
+    "encodedImage": "data:image/png;base64,...",
+    "payload": "00020126360014BR.GOV.BCB.PIX...",
+    "expirationDate": "2025-05-01T23:59:59-03:00"
+  }</code></pre>
+
+      <!-- DELETAR COBRANÇA -->
+      <h2>Deletar Cobrança</h2>
+      <div class="info-box">
+        <strong>Método:</strong> <code>DELETE /payments/:id</code><br />
+        Remove uma cobrança existente.
+      </div>
+      <h3>Headers</h3>
+      <ul class="features">
+        <li>
+          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
+        </li>
+      </ul>
+      <h3>Parâmetros de Query</h3>
+      <ul class="features">
+        <li>
+          <code>environment</code> (opcional): <code>SANDBOX</code> ou
+          <code>PROD</code>
+        </li>
+      </ul>
+      <h3>Exemplo de Requisição</h3>
+      <pre><code>DELETE /payments/pay_46jj8py77xxm1gd5?environment=SANDBOX
+  Headers:
+    access_token: SUA_CHAVE_DE_ACESSO</code></pre>
+      <h3>Exemplo de Resposta</h3>
+      <pre><code>{
+    "code": 200,
+    "message": "Cobrança excluída com sucesso."
+  }</code></pre>
 
       <!-- CAMPOS DE RESPOSTA -->
       <h2>Campos de Resposta</h2>
@@ -309,6 +485,14 @@ Headers:
           <td>number</td>
           <td>Valor da cobrança</td>
         </tr>
+        <tr>
+          <td><code>billingType</code></td>
+          <td>string</td>
+          <td>
+            Tipo da cobrança (<code>BOLETO</code>, <code>CREDIT_CARD</code>,
+            <code>PIX</code>)
+          </td>
+        </tr>
       </table>
 
       <h2>Observações</h2>
@@ -321,11 +505,20 @@ Headers:
           O parâmetro <code>environment</code> define se a operação será feita
           em <strong>SANDBOX</strong> (teste) ou
           <strong>PROD</strong> (produção). Se não informado, o padrão é
-          <code>SANDBOX</code>.
+          <code>PROD</code>.
         </li>
         <li>
           Todos os campos obrigatórios devem ser preenchidos para criar uma
           cobrança.
+        </li>
+        <li>
+          Para cobranças via cartão de crédito, os campos
+          <code>creditCard</code>, <code>creditCardHolderInfo</code> e
+          <code>remoteIp</code> são obrigatórios.
+        </li>
+        <li>
+          Para obter informações PIX, a cobrança deve ter sido criada com
+          <code>billingType: "PIX"</code>.
         </li>
       </ul>
     </main>
