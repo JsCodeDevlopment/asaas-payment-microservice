@@ -1,0 +1,21 @@
+POST http://localhost:8000/payments?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+
+{
+  "customerId": "cus_000006671674",
+  "value": 100,
+  "dueDate": "2025-05-01",
+  "billingType": "BOLETO",
+  "totalValue": 0
+}
+
+###
+GET http://localhost:8000/payments?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+
+###
+DELETE http://localhost:8000/payments/pay_fl2409d35aeidowx?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
