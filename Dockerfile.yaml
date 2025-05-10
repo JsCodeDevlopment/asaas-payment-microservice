@@ -1,0 +1,39 @@
+# Build stage
+FROM node:20.12.2-alpine AS builder
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
+
+# Copy source code and env file
+COPY . .
+
+# Build the application
+RUN yarn build
+
+# Production stage
+FROM node:20.12.2-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json yarn.lock ./
+
+# Install only production dependencies
+RUN yarn install --frozen-lockfile --production
+
+# Copy built application and env file from builder stage
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/.env ./.env
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+
+# Expose the port your app runs on
+EXPOSE 3000
+
+# Start the application
+CMD ["node", "dist/main"] 
