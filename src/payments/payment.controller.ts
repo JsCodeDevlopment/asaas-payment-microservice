@@ -20,7 +20,6 @@ import { CreditCardPaymentResponseDto } from 'src/payments/dto/credit-card-payme
 import { ListPaymentsResponseDto } from 'src/payments/dto/list-payments-response.dto';
 import { PixInfoResponseDto } from 'src/payments/dto/pix-info-response.dto';
 import { PaymentsService } from 'src/payments/payment.service';
-import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { SuccessResponseDto } from 'src/types/dto/success-response.dto';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -41,22 +40,18 @@ export class PaymentsController {
   @ApiResponse({
     status: 400,
     description: 'O campo customerId é obrigatório.',
-    type: ErrorResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'O campo billingType é obrigatório.',
-    type: ErrorResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'O campo value é obrigatório.',
-    type: ErrorResponseDto,
   })
   @ApiResponse({
     status: 400,
     description: 'O campo dueDate é obrigatório.',
-    type: ErrorResponseDto,
   })
   @ApiHeader({
     name: 'access_token',
@@ -74,7 +69,7 @@ export class PaymentsController {
     @Body() dto: CreatePaymentDto,
     @Headers('access_token') token: string,
     @Query('environment') environment: EnvironmentOptionsType,
-  ): Promise<PaymentResponseDto | ErrorResponseDto> {
+  ): Promise<PaymentResponseDto> {
     return this.svc.create(dto, token, environment);
   }
 
@@ -88,7 +83,6 @@ export class PaymentsController {
   @ApiResponse({
     status: 400,
     description: 'Campos obrigatórios ausentes ou inválidos.',
-    type: ErrorResponseDto,
   })
   @ApiHeader({
     name: 'access_token',
@@ -107,11 +101,11 @@ export class PaymentsController {
     dto: CreateCreditCardPaymentDto,
     @Headers('access_token') token: string,
     @Query('environment') environment: EnvironmentOptionsType,
-  ): Promise<CreditCardPaymentResponseDto | ErrorResponseDto> {
+  ): Promise<CreditCardPaymentResponseDto> {
     return this.svc.createCreditCardPayment(dto, token, environment);
   }
 
-  @Get(':id/pix-info')
+  @Get(':id/pix_info')
   @ApiOperation({
     summary:
       'Obtém informações do PIX (QR Code e Copia e Cola) para uma cobrança',
@@ -124,7 +118,6 @@ export class PaymentsController {
   @ApiResponse({
     status: 400,
     description: 'O campo id é obrigatório.',
-    type: ErrorResponseDto,
   })
   @ApiHeader({
     name: 'access_token',
@@ -142,7 +135,7 @@ export class PaymentsController {
     @Param('id') id: string,
     @Headers('access_token') token: string,
     @Query('environment') environment: EnvironmentOptionsType,
-  ): Promise<PixInfoResponseDto | ErrorResponseDto> {
+  ): Promise<PixInfoResponseDto> {
     return this.svc.getPixInfo(id, token, environment);
   }
 
@@ -156,7 +149,6 @@ export class PaymentsController {
   @ApiResponse({
     status: 404,
     description: 'Plano não encontrado.',
-    type: ErrorResponseDto,
   })
   @ApiHeader({
     name: 'access_token',
@@ -202,7 +194,7 @@ export class PaymentsController {
     @Query('offset') offset?: number,
     @Query('limit') limit?: number,
     @Query('customerId') customerId?: string,
-  ): Promise<ListPaymentsResponseDto | ErrorResponseDto> {
+  ): Promise<ListPaymentsResponseDto> {
     return this.svc.findAllPayments(token, environment, {
       installment,
       offset,
@@ -221,7 +213,6 @@ export class PaymentsController {
   @ApiResponse({
     status: 400,
     description: 'O campo id é obrigatório.',
-    type: ErrorResponseDto,
   })
   @ApiHeader({
     name: 'access_token',
@@ -239,7 +230,7 @@ export class PaymentsController {
     @Param('id') id: string,
     @Headers('access_token') token: string,
     @Query('environment') environment: EnvironmentOptionsType,
-  ): Promise<SuccessResponseDto | ErrorResponseDto> {
+  ): Promise<SuccessResponseDto> {
     return this.svc.deletePayment(id, token, environment);
   }
 }
