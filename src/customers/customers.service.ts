@@ -3,7 +3,6 @@ import { AxiosError } from 'axios';
 import { ListCustomersResponseDto } from 'src/customers/dto/list-customers-response.dto';
 import { FilterCustomerDto } from 'src/customers/types/get-customers-filters.type';
 import { formatError } from 'src/helpers/format-error.helper';
-import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
 import { RequestMethodsEnum } from 'src/types/request-methods.enum';
 import { AsaasService } from '../asaas/asaas.service';
@@ -18,7 +17,7 @@ export class CustomersService {
     dto: CreateCustomerDto,
     token: string,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<CustomerResponseDto | ErrorResponseDto> {
+  ): Promise<CustomerResponseDto> {
     try {
       return await this.asaas.request<CustomerResponseDto, CreateCustomerDto>(
         RequestMethodsEnum.POST,
@@ -28,8 +27,7 @@ export class CustomersService {
         environment,
       );
     } catch (error) {
-      const axiosError = error as AxiosError;
-      return formatError(axiosError);
+      formatError(error as AxiosError);
     }
   }
 
@@ -37,7 +35,7 @@ export class CustomersService {
     token: string,
     filters?: FilterCustomerDto,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<ListCustomersResponseDto | ErrorResponseDto> {
+  ): Promise<ListCustomersResponseDto> {
     try {
       return await this.asaas.request<ListCustomersResponseDto>(
         RequestMethodsEnum.GET,
@@ -48,8 +46,7 @@ export class CustomersService {
         filters,
       );
     } catch (error) {
-      const axiosError = error as AxiosError;
-      return formatError(axiosError);
+      formatError(error as AxiosError);
     }
   }
 }
