@@ -20,7 +20,7 @@ import { AsaasModule } from './asaas/asaas.module';
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
-      exclude: ['/api*'],
+      exclude: ['/api'],
     }),
     AsaasModule.registerAsync(),
     CustomersModule,
