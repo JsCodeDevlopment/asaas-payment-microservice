@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { formatError } from 'src/helpers/format-error.helper';
-import { ErrorResponseDto } from 'src/types/dto/error-response.dto';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
 import { RequestMethodsEnum } from 'src/types/request-methods.enum';
 import { AsaasService } from '../asaas/asaas.service';
@@ -16,22 +15,21 @@ export class PaymentLinksService {
     dto: CreatePaymentLinkDto,
     token: string,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<PaymentLinkResponseDto | ErrorResponseDto> {
+  ): Promise<PaymentLinkResponseDto> {
     try {
       return await this.asaas.request<
         PaymentLinkResponseDto,
         CreatePaymentLinkDto
       >(RequestMethodsEnum.POST, '/paymentLinks', dto, token, environment);
     } catch (error) {
-      const axiosError = error as AxiosError;
-      return formatError(axiosError);
+      formatError(error as AxiosError);
     }
   }
 
   async findAll(
     token: string,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<PaymentLinkResponseDto[] | ErrorResponseDto> {
+  ): Promise<PaymentLinkResponseDto[]> {
     try {
       return await this.asaas.request<PaymentLinkResponseDto[], undefined>(
         RequestMethodsEnum.GET,
@@ -41,8 +39,7 @@ export class PaymentLinksService {
         environment,
       );
     } catch (error) {
-      const axiosError = error as AxiosError;
-      return formatError(axiosError);
+      formatError(error as AxiosError);
     }
   }
 
@@ -50,7 +47,7 @@ export class PaymentLinksService {
     id: string,
     token: string,
     environment: EnvironmentOptionsType = 'PROD',
-  ): Promise<PaymentLinkResponseDto | ErrorResponseDto> {
+  ): Promise<PaymentLinkResponseDto> {
     try {
       return await this.asaas.request<PaymentLinkResponseDto, undefined>(
         RequestMethodsEnum.GET,
@@ -60,8 +57,7 @@ export class PaymentLinksService {
         environment,
       );
     } catch (error) {
-      const axiosError = error as AxiosError;
-      return formatError(axiosError);
+      formatError(error as AxiosError);
     }
   }
 }
