@@ -10,6 +10,8 @@ import { NotificationsModule } from 'src/notifications/notifications.module';
 import { PaymentLinksModule } from 'src/payment-links/payment-links.module';
 import { PaymentsModule } from 'src/payments/payments.module';
 import { AsaasModule } from './asaas/asaas.module';
+import { DatabaseModule } from './database/database.module';
+import { WebhookModule } from './webhooks/webhook.module';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { AsaasModule } from './asaas/asaas.module';
       load: [asaasConfig],
       envFilePath: ['.env'],
     }),
+    DatabaseModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       exclude: ['/api'],
@@ -27,6 +30,7 @@ import { AsaasModule } from './asaas/asaas.module';
     PaymentsModule,
     PaymentLinksModule,
     NotificationsModule,
+    WebhookModule,
   ],
 })
 export class AppModule {}
