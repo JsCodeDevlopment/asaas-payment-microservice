@@ -1,0 +1,53 @@
+POST http://localhost:8000/webhooks?environment=SANDBOX
+Content-Type: application/json
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE0MjNhMDc1LTUzYzgtNGMzYi04NTU4LWYyYWEyZmYyMjI4Yjo6JGFhY2hfMDZkNGY5MWItNDBlMS00YjE5LTg1ZjUtMWQxZmQ3YmE1NmI3
+
+{
+  "name": "Payment Confirmation Service",
+  "url": "http://localhost:8000/webhooks/asaas",
+  "email": "ops@example.com",
+  "enabled": true,
+  "authToken": "550e8400-e29b-41d4-a716-446655440000",
+  "sendType": "SEQUENTIALLY",
+  "events": [
+    "PAYMENT_RECEIVED",
+    "PAYMENT_CONFIRMED",
+    "PAYMENT_CREDIT_CARD_CAPTURE_REFUSED"
+  ]
+}
+
+###
+POST http://localhost:8000/webhooks/asaas
+Content-Type: application/json
+asaas-webhook-token: 550e8400-e29b-41d4-a716-446655440000
+
+{
+  "event": "PAYMENT_RECEIVED",
+  "payment": {
+    "id": "pay_123456789",
+    "dateCreated": "2024-03-20",
+    "customer": "cus_000006705636",
+    "value": 100.00,
+    "netValue": 97.00,
+    "billingType": "PIX",
+    "status": "RECEIVED",
+    "dueDate": "2024-03-21",
+    "originalDueDate": "2024-03-21",
+    "invoiceUrl": "https://sandbox.asaas.com/i/123456789",
+    "invoiceNumber": "0012345",
+    "externalReference": null,
+    "deleted": false,
+    "anticipated": false,
+    "anticipable": false,
+    "creditDate": "2024-03-21",
+    "estimatedCreditDate": "2024-03-21",
+    "transactionReceiptUrl": null,
+    "nossoNumero": null,
+    "bankSlipUrl": null,
+    "lastInvoiceViewedDate": null,
+    "lastBankSlipViewedDate": null,
+    "postalService": false,
+    "custody": null,
+    "refunds": null
+  }
+} 
