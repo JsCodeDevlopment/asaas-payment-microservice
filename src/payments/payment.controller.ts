@@ -105,7 +105,7 @@ export class PaymentsController {
     return this.svc.createCreditCardPayment(dto, token, environment);
   }
 
-  @Get(':id/pix_info')
+  @Get(':id/pix-info')
   @ApiOperation({
     summary:
       'Obtém informações do PIX (QR Code e Copia e Cola) para uma cobrança',
