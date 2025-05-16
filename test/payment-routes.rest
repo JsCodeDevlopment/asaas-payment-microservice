@@ -1,19 +1,19 @@
 POST http://localhost:8000/payments?environment=SANDBOX
 Content-Type: application/json
-access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE0MjNhMDc1LTUzYzgtNGMzYi04NTU4LWYyYWEyZmYyMjI4Yjo6JGFhY2hfMDZkNGY5MWItNDBlMS00YjE5LTg1ZjUtMWQxZmQ3YmE1NmI3
 
 {
-  "customer": "cus_000006671674",
+  "customer": "cus_000006705636",
   "value": 100,
-  "dueDate": "2025-05-01",
-  "billingType": "BOLETO",
+  "dueDate": "2025-06-01",
+  "billingType": "PIX",
   "totalValue": 0
 }
 
 ###
 POST http://localhost:8000/payments/credit-card?environment=SANDBOX
 Content-Type: application/json
-access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE0MjNhMDc1LTUzYzgtNGMzYi04NTU4LWYyYWEyZmYyMjI4Yjo6JGFhY2hfMDZkNGY5MWItNDBlMS00YjE5LTg1ZjUtMWQxZmQ3YmE1NmI3
 
 {
   "customer": "cus_000006671674",
@@ -44,14 +44,14 @@ access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3
 ###
 GET http://localhost:8000/payments?environment=SANDBOX
 Content-Type: application/json
-access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE0MjNhMDc1LTUzYzgtNGMzYi04NTU4LWYyYWEyZmYyMjI4Yjo6JGFhY2hfMDZkNGY5MWItNDBlMS00YjE5LTg1ZjUtMWQxZmQ3YmE1NmI3
 
 ###
-GET http://localhost:8000/payments/pay_4vyqs3ra7dq3z954/pix-info?environment=SANDBOX
+GET http://localhost:8000/payments/pay_u4n5vwde3gccxxxq/pix-info?environment=SANDBOX
 Content-Type: application/json
-access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE0MjNhMDc1LTUzYzgtNGMzYi04NTU4LWYyYWEyZmYyMjI4Yjo6JGFhY2hfMDZkNGY5MWItNDBlMS00YjE5LTg1ZjUtMWQxZmQ3YmE1NmI3
 
 ###
-DELETE http://localhost:8000/payments/pay_46jj8py77xxm1gd5?environment=SANDBOX
+DELETE http://localhost:8000/payments/pay_3xgzyebqwlp9bxfd?environment=SANDBOX
 Content-Type: application/json
-access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE0MjNhMDc1LTUzYzgtNGMzYi04NTU4LWYyYWEyZmYyMjI4Yjo6JGFhY2hfMDZkNGY5MWItNDBlMS00YjE5LTg1ZjUtMWQxZmQ3YmE1NmI3

@@ -1,12 +1,12 @@
 POST http://localhost:8000/customers?environment=SANDBOX
 Content-Type: application/json
-access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE0MjNhMDc1LTUzYzgtNGMzYi04NTU4LWYyYWEyZmYyMjI4Yjo6JGFhY2hfMDZkNGY5MWItNDBlMS00YjE5LTg1ZjUtMWQxZmQ3YmE1NmI3
 
 {
-  "name": "John Doe",
-  "cpfCnpj": "161.009.670-30",
-  "email": "john@example.com",
-  "phone": "+5511999998888",
+  "name": "Usuário Teste",
+  "cpfCnpj": "571.895.310-41",
+  "email": "usuario@teste.com",
+  "phone": "+5588992814764",
   "address": "Rua Exemplo",
   "addressNumber": "51",
   "province": "Bairro Exemplo",
@@ -17,4 +17,4 @@ access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3
 
 GET http://localhost:8000/customers?environment=SANDBOX
 Content-Type: application/json
-access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE1MDk3NThkLTQ1ODctNDM5OS1iNmUyLTE1NDIyZjVjMTQxODo6JGFhY2hfODA5ZWJlMmMtZjgwMC00NTY0LTg4NDAtNjVlNGU4NWZhNWFh
+access_token: $aact_hmlg_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmE0MjNhMDc1LTUzYzgtNGMzYi04NTU4LWYyYWEyZmYyMjI4Yjo6JGFhY2hfMDZkNGY5MWItNDBlMS00YjE5LTg1ZjUtMWQxZmQ3YmE1NmI3
