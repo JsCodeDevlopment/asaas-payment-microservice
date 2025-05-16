@@ -5,6 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
 import { RequestMethodsType } from 'src/types/request-methods.enum';
 import { AsaasConfig } from '../config/asaas.config';
+import { CreateWebhookDto } from '../webhooks/dto/create-webhook.dto';
 
 @Injectable()
 export class AsaasService {
@@ -48,5 +49,19 @@ export class AsaasService {
       }),
     );
     return response.data;
+  }
+
+  async createWebhook(
+    dto: CreateWebhookDto,
+    accessToken: string,
+    environment: EnvironmentOptionsType = 'PROD',
+  ) {
+    return this.request(
+      'POST',
+      '/api/v3/webhooks',
+      dto,
+      accessToken,
+      environment,
+    );
   }
 }
