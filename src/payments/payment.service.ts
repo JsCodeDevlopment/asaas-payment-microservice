@@ -10,11 +10,17 @@ import { EnvironmentOptionsType } from 'src/types/environment.enum';
 import { RequestMethodsEnum } from 'src/types/request-methods.enum';
 import { AsaasService } from '../asaas/asaas.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
+import { CreditCardPaymentResponseDto } from './dto/credit-card-payment-response.dto';
+import { EncryptedCreditCardPaymentDto } from './dto/encrypted-credit-card-payment.dto';
 import { PaymentResponseDto } from './dto/payment-response.dto';
+import { EncryptionService } from './services/encryption.service';
 
 @Injectable()
 export class PaymentsService {
-  constructor(private readonly asaas: AsaasService) {}
+  constructor(
+    private readonly asaas: AsaasService,
+    private readonly encryptionService: EncryptionService,
+  ) {}
 
   async create(
     dto: CreatePaymentDto,
@@ -91,6 +97,45 @@ export class PaymentsService {
     } catch (error) {
       formatError(error as AxiosError);
     }
+  }
+
+  /**
+   * Cria uma cobrança via cartão de crédito com dados não criptografados.
+   *
+   * Este método realiza as seguintes validações antes de processar o pagamento:
+   * - Verifica se o ID do cliente (customer) foi informado
+   * - Verifica se o valor (value) ou valor total (totalValue) foi informado
+   * - Verifica se a data de vencimento (dueDate) foi informada
+   * - Verifica se os dados do cartão de crédito (creditCard) foram informados
+   * - Verifica se as informações do titular do cartão (creditCardHolderInfo) foram informadas
+   * - Verifica se o IP remoto (remoteIp) foi informado
+   *
+   * Após as validações, o método faz uma requisição POST para a API do Asaas
+   * com os dados do pagamento, incluindo o tipo de cobrança como 'CREDIT_CARD'.
+   *
+   * @param dto - DTO contendo os dados do pagamento, incluindo informações do cartão de crédito
+   * @param token - Token de acesso para autenticação na API do Asaas
+   * @param environment - Ambiente da API (PROD ou SANDBOX). Padrão: 'PROD'
+   * @returns Promise<PaymentResponseDto> - Resposta da API contendo os dados da cobrança criada
+   * @throws BadRequestException - Se algum campo obrigatório não for informado
+   * @throws AxiosError - Se houver erro na comunicação com a API do Asaas
+   */
+  async createSecureCreditCardPayment(
+    dto: EncryptedCreditCardPaymentDto,
+    token: string,
+    environment: EnvironmentOptionsType,
+  ): Promise<CreditCardPaymentResponseDto> {
+    const decryptedData = this.encryptionService.decrypt(
+      dto.encryptedCreditCard.encryptedData,
+    );
+    const creditCardData = JSON.parse(decryptedData);
+
+    const regularDto: CreateCreditCardPaymentDto = {
+      ...dto,
+      creditCard: creditCardData,
+    };
+
+    return this.createCreditCardPayment(regularDto, token, environment);
   }
 
   async getPixInfo(
