@@ -23,12 +23,17 @@ import { PaymentsService } from 'src/payments/payment.service';
 import { SuccessResponseDto } from 'src/types/dto/success-response.dto';
 import { EnvironmentOptionsType } from 'src/types/environment.enum';
 import { CreatePaymentDto } from './dto/create-payment.dto';
+import { EncryptedCreditCardPaymentDto } from './dto/encrypted-credit-card-payment.dto';
 import { PaymentResponseDto } from './dto/payment-response.dto';
+import { EncryptionService } from './services/encryption.service';
 
 @ApiTags('payments')
 @Controller('payments')
 export class PaymentsController {
-  constructor(private readonly svc: PaymentsService) {}
+  constructor(
+    private readonly svc: PaymentsService,
+    private readonly encryptionService: EncryptionService,
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Cria uma nova cobrança' })
@@ -232,5 +237,52 @@ export class PaymentsController {
     @Query('environment') environment: EnvironmentOptionsType,
   ): Promise<SuccessResponseDto> {
     return this.svc.deletePayment(id, token, environment);
+  }
+
+  @Get('public-key')
+  @ApiOperation({
+    summary: 'Obtém a chave pública para criptografia dos dados do cartão',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Chave pública retornada com sucesso.',
+    type: String,
+  })
+  getPublicKey(): string {
+    return this.encryptionService.getPublicKey();
+  }
+
+  @Post('secure/credit-card')
+  @ApiOperation({
+    summary:
+      'Cria uma nova cobrança via cartão de crédito com dados criptografados',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Cobrança criada com sucesso.',
+    type: CreditCardPaymentResponseDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Campos obrigatórios ausentes ou inválidos.',
+  })
+  @ApiHeader({
+    name: 'access_token',
+    description: 'API Key do Asaas para autenticação',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'environment',
+    enum: ['SANDBOX', 'PROD'],
+    description: 'Escolhe o ambiente Asaas (SANDBOX ou PROD)',
+    required: false,
+    example: 'SANDBOX',
+  })
+  createSecureCreditCardPayment(
+    @Body() dto: EncryptedCreditCardPaymentDto,
+    @Headers('access_token') token: string,
+    @Query('environment') environment: EnvironmentOptionsType,
+  ): Promise<CreditCardPaymentResponseDto> {
+    return this.svc.createSecureCreditCardPayment(dto, token, environment);
   }
 }
