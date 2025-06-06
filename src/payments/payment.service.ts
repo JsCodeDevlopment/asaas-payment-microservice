@@ -14,12 +14,15 @@ import { CreditCardPaymentResponseDto } from './dto/credit-card-payment-response
 import { EncryptedCreditCardPaymentDto } from './dto/encrypted-credit-card-payment.dto';
 import { PaymentResponseDto } from './dto/payment-response.dto';
 import { EncryptionService } from './services/encryption.service';
+import { PaymentValidationService } from './services/payment-validation.service';
+import { DecryptedCreditCardData } from './types/decrypted-credit-card.type';
 
 @Injectable()
 export class PaymentsService {
   constructor(
     private readonly asaas: AsaasService,
     private readonly encryptionService: EncryptionService,
+    private readonly validationService: PaymentValidationService,
   ) {}
 
   async create(
@@ -28,18 +31,7 @@ export class PaymentsService {
     environment: EnvironmentOptionsType = 'PROD',
   ): Promise<PaymentResponseDto> {
     try {
-      if (!dto.customer) {
-        throw new BadRequestException('O campo customer é obrigatório.');
-      }
-      if (!dto.billingType) {
-        throw new BadRequestException('O campo billingType é obrigatório.');
-      }
-      if (dto.value === undefined || dto.value === null) {
-        throw new BadRequestException('O campo value é obrigatório.');
-      }
-      if (!dto.dueDate) {
-        throw new BadRequestException('O campo dueDate é obrigatório.');
-      }
+      this.validationService.validateBasePayment(dto);
 
       return await this.asaas.request<PaymentResponseDto, CreatePaymentDto>(
         RequestMethodsEnum.POST,
@@ -59,30 +51,7 @@ export class PaymentsService {
     environment: EnvironmentOptionsType = 'PROD',
   ): Promise<PaymentResponseDto> {
     try {
-      if (!dto.customer) {
-        throw new BadRequestException('O campo customer é obrigatório.');
-      }
-      if (!dto.value && !dto.totalValue) {
-        throw new BadRequestException(
-          'O campo value ou totalValue é obrigatório.',
-        );
-      }
-      if (!dto.dueDate) {
-        throw new BadRequestException('O campo dueDate é obrigatório.');
-      }
-      if (!dto.creditCard) {
-        throw new BadRequestException(
-          'Os dados do cartão de crédito são obrigatórios.',
-        );
-      }
-      if (!dto.creditCardHolderInfo) {
-        throw new BadRequestException(
-          'As informações do titular do cartão são obrigatórias.',
-        );
-      }
-      if (!dto.remoteIp) {
-        throw new BadRequestException('O campo remoteIp é obrigatório.');
-      }
+      this.validationService.validateCreditCardPayment(dto);
 
       return await this.asaas.request<
         PaymentResponseDto,
@@ -100,42 +69,89 @@ export class PaymentsService {
   }
 
   /**
-   * Cria uma cobrança via cartão de crédito com dados não criptografados.
+   * Cria um pagamento seguro com cartão de crédito usando dados criptografados.
    *
-   * Este método realiza as seguintes validações antes de processar o pagamento:
-   * - Verifica se o ID do cliente (customer) foi informado
-   * - Verifica se o valor (value) ou valor total (totalValue) foi informado
-   * - Verifica se a data de vencimento (dueDate) foi informada
-   * - Verifica se os dados do cartão de crédito (creditCard) foram informados
-   * - Verifica se as informações do titular do cartão (creditCardHolderInfo) foram informadas
-   * - Verifica se o IP remoto (remoteIp) foi informado
+   * Este método implementa um fluxo seguro para processamento de pagamentos com cartão de crédito,
+   * onde os dados sensíveis do cartão (número, CCV) são recebidos de forma criptografada.
    *
-   * Após as validações, o método faz uma requisição POST para a API do Asaas
-   * com os dados do pagamento, incluindo o tipo de cobrança como 'CREDIT_CARD'.
+   * O fluxo de funcionamento é:
+   * 1. Validação inicial dos dados do pagamento usando PaymentValidationService
+   * 2. Descriptografia dos dados do cartão usando EncryptionService
+   * 3. Validação dos dados descriptografados
+   * 4. Conversão para o formato padrão de pagamento
+   * 5. Processamento do pagamento via Asaas
    *
-   * @param dto - DTO contendo os dados do pagamento, incluindo informações do cartão de crédito
-   * @param token - Token de acesso para autenticação na API do Asaas
-   * @param environment - Ambiente da API (PROD ou SANDBOX). Padrão: 'PROD'
-   * @returns Promise<PaymentResponseDto> - Resposta da API contendo os dados da cobrança criada
-   * @throws BadRequestException - Se algum campo obrigatório não for informado
-   * @throws AxiosError - Se houver erro na comunicação com a API do Asaas
+   * @param dto - DTO contendo os dados do pagamento, incluindo:
+   *   - Dados básicos (customer, value, dueDate, etc)
+   *   - Dados do titular do cartão (creditCardHolderInfo)
+   *   - Dados do cartão criptografados (encryptedCreditCard)
+   * @param token - Token de autenticação para a API Asaas
+   * @param environment - Ambiente de execução (PROD/SANDBOX)
+   *
+   * @returns Promise<CreditCardPaymentResponseDto> - Resposta do processamento do pagamento
+   *
+   * @throws {BadRequestException} - Se os dados do cartão forem inválidos após descriptografia
+   * @throws {AxiosError} - Se houver erro na comunicação com a API Asaas
+   *
+   * @example
+   * // Exemplo de uso:
+   * const payment = await paymentsService.createSecureCreditCardPayment({
+   *   customer: 'cus_123',
+   *   value: 100.00,
+   *   dueDate: '2024-12-31',
+   *   encryptedCreditCard: {
+   *     encryptedData: 'encrypted_base64_string'
+   *   },
+   *   creditCardHolderInfo: {
+   *     name: 'John Doe',
+   *     email: 'john@example.com',
+   *     // ... outros dados do titular
+   *   },
+   *   remoteIp: '127.0.0.1'
+   * }, 'asaas_token', 'PROD');
    */
   async createSecureCreditCardPayment(
     dto: EncryptedCreditCardPaymentDto,
     token: string,
     environment: EnvironmentOptionsType,
   ): Promise<CreditCardPaymentResponseDto> {
-    const decryptedData = this.encryptionService.decrypt(
-      dto.encryptedCreditCard.encryptedData,
-    );
-    const creditCardData = JSON.parse(decryptedData);
+    try {
+      this.validationService.validateCreditCardPayment(dto);
 
-    const regularDto: CreateCreditCardPaymentDto = {
-      ...dto,
-      creditCard: creditCardData,
-    };
+      const decryptedData = this.encryptionService.decrypt(
+        dto.encryptedCreditCard.encryptedData,
+      );
+      const creditCardData = JSON.parse(
+        decryptedData,
+      ) as DecryptedCreditCardData;
 
-    return this.createCreditCardPayment(regularDto, token, environment);
+      if (!creditCardData.number || !creditCardData.ccv) {
+        throw new BadRequestException(
+          'Dados do cartão inválidos após descriptografia.',
+        );
+      }
+
+      const regularDto: CreateCreditCardPaymentDto = {
+        customer: dto.customer,
+        value: dto.value,
+        dueDate: dto.dueDate,
+        installmentCount: dto.installmentCount,
+        totalValue: dto.totalValue,
+        creditCard: {
+          holderName: dto.creditCardHolderInfo.name,
+          number: creditCardData.number,
+          ccv: creditCardData.ccv,
+          expiryMonth: creditCardData.expiryMonth,
+          expiryYear: creditCardData.expiryYear,
+        },
+        creditCardHolderInfo: dto.creditCardHolderInfo,
+        remoteIp: dto.remoteIp,
+      };
+
+      return this.createCreditCardPayment(regularDto, token, environment);
+    } catch (error) {
+      formatError(error as AxiosError);
+    }
   }
 
   async getPixInfo(
