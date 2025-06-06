@@ -44,6 +44,35 @@ export class EncryptedCreditCardPaymentDto {
   };
 
   @ApiProperty({
+    description: 'Dados do cartão de crédito',
+    required: true,
+    example: {
+      holderName: 'Nome do titular',
+      expiryMonth: '12',
+      expiryYear: '2025',
+    },
+  })
+  creditCard: {
+    holderName: string;
+    expiryMonth: string;
+    expiryYear: string;
+  };
+
+  @ApiProperty({
+    description: 'Mês de expiração do cartão de crédito',
+    example: '12',
+    required: true,
+  })
+  expiryMonth: string;
+
+  @ApiProperty({
+    description: 'Ano de expiração do cartão de crédito',
+    example: '2025',
+    required: true,
+  })
+  expiryYear: string;
+
+  @ApiProperty({
     description: 'Informações do titular do cartão de crédito',
     example: {
       name: 'Nome do titular',
