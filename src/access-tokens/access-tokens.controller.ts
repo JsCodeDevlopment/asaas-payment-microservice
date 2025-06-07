@@ -14,7 +14,7 @@ import { CreateAccessTokenDto } from './dto/create-access-token.dto';
 import { UpdateAccessTokenDto } from './dto/update-access-token.dto';
 import { AccessToken } from './entities/access-token.entity';
 
-@Controller('asaas/access-tokens')
+@Controller('access-tokens')
 export class AccessTokensController {
   constructor(private readonly accessTokensService: AccessTokensService) {}
 
