@@ -1,0 +1,81 @@
+### Variáveis de ambiente
+@baseUrl = http://localhost:8000
+@contentType = application/json
+
+### Criar um novo access token
+POST {{baseUrl}}/access-tokens
+Content-Type: {{contentType}}
+
+{
+    "clientId": "RHtrip-PROD-token",
+    "accessToken": "$aact_prod_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OmM5ZGU3NTI4LTAyNWEtNGI0NS1iNzkwLWU2MGQxNThiOGE4Yjo6JGFhY2hfYTlkMDcxMGYtZjliNC00MTUxLWE2MWEtNWY2MWM2YTEyNzc4",
+    "description": "Token do RHtrip para ambiente de produção"
+}
+
+### Listar todos os access tokens
+GET {{baseUrl}}/access-tokens
+Content-Type: {{contentType}}
+
+### Buscar um access token específico (substitua {id} pelo ID real)
+GET {{baseUrl}}/access-tokens/cf45d33a-fe97-4137-9f11-afa8b28d5593
+Content-Type: {{contentType}}
+
+### Atualizar um access token (substitua {id} pelo ID real)
+PATCH {{baseUrl}}/access-tokens/{id}
+Content-Type: {{contentType}}
+
+{
+    "accessToken": "new_asaas_access_token_here",
+    "description": "Token atualizado",
+    "isActive": true
+}
+
+### Desativar um access token (substitua {id} pelo ID real)
+PATCH {{baseUrl}}/access-tokens/{id}
+Content-Type: {{contentType}}
+
+{
+    "isActive": false
+}
+
+### Deletar um access token (substitua {id} pelo ID real)
+DELETE {{baseUrl}}/access-tokens/{id}
+Content-Type: {{contentType}}
+
+### Testar o token em uma requisição de pagamento
+POST {{baseUrl}}/payments
+Content-Type: {{contentType}}
+access_token: your_asaas_access_token_here
+
+{
+    "customer": "cus_000000000001",
+    "billingType": "CREDIT_CARD",
+    "value": 100.00,
+    "dueDate": "2024-03-20",
+    "description": "Teste de pagamento com access token"
+}
+
+### Testar o token em uma requisição de cliente
+POST {{baseUrl}}/customers
+Content-Type: {{contentType}}
+access_token: your_asaas_access_token_here
+
+{
+    "name": "Cliente Teste",
+    "cpfCnpj": "12345678909",
+    "email": "cliente@teste.com",
+    "phone": "11999999999"
+}
+
+### Testar o token em uma requisição de link de pagamento
+POST {{baseUrl}}/payment-links
+Content-Type: {{contentType}}
+access_token: your_asaas_access_token_here
+
+{
+    "name": "Link de Pagamento Teste",
+    "description": "Teste de link de pagamento com access token",
+    "endDate": "2024-03-20",
+    "value": 100.00,
+    "billingType": "CREDIT_CARD"
+} 
