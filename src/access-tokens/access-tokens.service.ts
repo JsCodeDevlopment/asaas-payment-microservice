@@ -4,6 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AxiosError } from 'axios';
+import { formatError } from 'src/helpers/format-error.helper';
 import { Repository } from 'typeorm';
 import { CreateAccessTokenDto } from './dto/create-access-token.dto';
 import { UpdateAccessTokenDto } from './dto/update-access-token.dto';
@@ -32,7 +34,12 @@ export class AccessTokensService {
   }
 
   async findAll(): Promise<AccessToken[]> {
-    return this.accessTokenRepository.find();
+    try {
+      const tokens = await this.accessTokenRepository.find();
+      return tokens;
+    } catch (error) {
+      formatError(error as AxiosError);
+    }
   }
 
   async findOne(id: string): Promise<AccessToken> {
