@@ -11,6 +11,8 @@ Microserviço desenvolvido em NestJS que encapsula toda a integração com a API
 - 🔗 Geração de links de pagamento
 - 📱 Notificações de pagamento
 - 📊 Documentação Swagger integrada
+- 🎛️ Painel administrativo para gerenciamento de tokens
+- 📚 Documentação detalhada e navegável
 
 ## Estrutura do Projeto
 
@@ -300,9 +302,43 @@ class PaymentService {
 }
 ```
 
-## Documentação da API
+## Documentação
 
-A documentação completa da API está disponível via Swagger UI:
+### Documentação Web
+A documentação completa do sistema está disponível em formato web, com navegação intuitiva e exemplos detalhados:
+
+```
+http://localhost:8000/documentation
+```
+
+A documentação inclui:
+- Introdução e conceitos básicos
+- Autenticação e segurança
+- Gerenciamento de tokens
+- Operações com clientes
+- Processamento de pagamentos
+- Links de pagamento
+- Notificações e webhooks
+- Interface administrativa
+
+### Painel Administrativo
+O sistema inclui um painel administrativo para gerenciamento de tokens de acesso:
+
+```
+http://localhost:8000/admin
+```
+
+Funcionalidades do painel:
+- Criação e gerenciamento de tokens
+- Visualização de tokens ativos/inativos
+- Ativação/desativação de tokens
+- Histórico de tokens por cliente
+- Interface intuitiva e responsiva
+- Notificações em tempo real
+- Suporte a múltiplos ambientes (sandbox/produção)
+
+### Documentação da API
+A documentação técnica da API está disponível via Swagger UI:
 
 ```
 http://localhost:8000/api
