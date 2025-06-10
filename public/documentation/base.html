@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - Gateway de Pagamentos Asaas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .endpoint {
+            border-left: 4px solid #0d6efd;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+        .method {
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: white;
+        }
+        .get { background-color: #0d6efd; }
+        .post { background-color: #198754; }
+        .put { background-color: #fd7e14; }
+        .patch { background-color: #6f42c1; }
+        .delete { background-color: #dc3545; }
+        .required { color: #dc3545; }
+        .optional { color: #6c757d; }
+        .nav-link.active {
+            background-color: #0d6efd !important;
+            color: white !important;
+        }
+        .nav-link {
+            color: #0d6efd;
+        }
+        .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.25rem;
+        }
+        .environment-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-left: 0.5rem;
+        }
+        .sandbox { background-color: #ffc107; color: #000; }
+        .prod { background-color: #198754; color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="min-height: 100vh;">
+                <div class="position-sticky pt-3">
+                    <h5 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+                        <span>Documentação da API</span>
+                    </h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="introduction.html">
+                                <i class="bi bi-info-circle"></i> Introdução
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="authentication.html">
+                                <i class="bi bi-shield-lock"></i> Autenticação
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="access-tokens.html">
+                                <i class="bi bi-key"></i> Access Tokens
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="customers.html">
+                                <i class="bi bi-people"></i> Clientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="payments.html">
+                                <i class="bi bi-credit-card"></i> Pagamentos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="payment-links.html">
+                                <i class="bi bi-link"></i> Links de Pagamento
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="notifications.html">
+                                <i class="bi bi-bell"></i> Notificações
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.html">
+                                <i class="bi bi-gear"></i> Interface Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                {{content}}
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Ativa o link da página atual
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

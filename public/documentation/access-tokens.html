@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clientes - Gateway de Pagamentos Asaas</title>
+    <title>Access Tokens - Gateway de Pagamentos Asaas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -71,12 +71,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="access-tokens.html">
+                            <a class="nav-link active" href="access-tokens.html">
                                 <i class="bi bi-key"></i> Access Tokens
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="customers.html">
+                            <a class="nav-link" href="customers.html">
                                 <i class="bi bi-people"></i> Clientes
                             </a>
                         </li>
@@ -106,8 +106,8 @@
 
             <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                <h1>Clientes</h1>
-                <p class="lead">Gerencie os clientes no gateway de pagamentos Asaas</p>
+                <h1>Access Tokens</h1>
+                <p class="lead">Gerencie os tokens de acesso do Asaas para diferentes clientes</p>
 
                 <section class="mb-5">
                     <h2>Endpoints</h2>
@@ -115,32 +115,17 @@
                     <div class="endpoint">
                         <h4>
                             <span class="method get">GET</span>
-                            <code>/api/customers</code>
+                            <code>/api/access-tokens</code>
                         </h4>
-                        <p>Lista todos os clientes cadastrados.</p>
+                        <p>Lista todos os tokens de acesso cadastrados.</p>
                         <h5>Resposta</h5>
                         <pre><code>[
   {
     "id": "string",
-    "name": "string",
-    "cpfCnpj": "string",
-    "email": "string",
-    "phone": "string",
-    "mobilePhone": "string",
-    "address": "string",
-    "addressNumber": "string",
-    "complement": "string",
-    "province": "string",
-    "postalCode": "string",
-    "externalReference": "string",
-    "notificationDisabled": boolean,
-    "additionalEmails": "string[]",
-    "municipalInscription": "string",
-    "stateInscription": "string",
-    "observations": "string",
-    "groupName": "string",
-    "company": "string",
-    "asaasId": "string",
+    "clientId": "string",
+    "accessToken": "string",
+    "description": "string",
+    "isActive": boolean,
     "createdAt": "string",
     "updatedAt": "string"
   }
@@ -150,129 +135,112 @@
                     <div class="endpoint">
                         <h4>
                             <span class="method post">POST</span>
-                            <code>/api/customers</code>
+                            <code>/api/access-tokens</code>
                         </h4>
-                        <p>Cria um novo cliente.</p>
+                        <p>Cria um novo token de acesso.</p>
                         <h5>Request Body</h5>
                         <pre><code>{
-  "name": "string",                    // Nome completo ou razão social
-  "cpfCnpj": "string",                // CPF ou CNPJ (apenas números)
-  "email": "string",                  // Email principal
-  "phone": "string",                  // Telefone fixo (opcional)
-  "mobilePhone": "string",            // Telefone celular (opcional)
-  "address": "string",                // Endereço (opcional)
-  "addressNumber": "string",          // Número do endereço (opcional)
-  "complement": "string",             // Complemento (opcional)
-  "province": "string",               // Bairro (opcional)
-  "postalCode": "string",             // CEP (opcional)
-  "externalReference": "string",      // Referência externa (opcional)
-  "notificationDisabled": boolean,    // Desabilita notificações (opcional)
-  "additionalEmails": "string[]",     // Emails adicionais (opcional)
-  "municipalInscription": "string",   // Inscrição municipal (opcional)
-  "stateInscription": "string",       // Inscrição estadual (opcional)
-  "observations": "string",           // Observações (opcional)
-  "groupName": "string",              // Nome do grupo (opcional)
-  "company": "string"                 // Nome da empresa (opcional)
+  "clientId": "string",     // Identificador único do cliente
+  "accessToken": "string",  // Token de acesso do Asaas
+  "description": "string"   // Descrição opcional
 }</code></pre>
                         <h5>Exemplo</h5>
-                        <pre><code>curl -X POST "http://seu-servidor/api/customers" \
+                        <pre><code>curl -X POST "http://seu-servidor/api/access-tokens" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "João da Silva",
-    "cpfCnpj": "12345678909",
-    "email": "joao@email.com",
-    "mobilePhone": "11999999999",
-    "address": "Rua das Flores",
-    "addressNumber": "123",
-    "complement": "Apto 45",
-    "province": "Centro",
-    "postalCode": "12345678"
+    "clientId": "cliente_123",
+    "accessToken": "seu_token_asaas",
+    "description": "Token para ambiente de produção"
   }'</code></pre>
                     </div>
 
                     <div class="endpoint">
                         <h4>
                             <span class="method get">GET</span>
-                            <code>/api/customers/:id</code>
+                            <code>/api/access-tokens/:id</code>
                         </h4>
-                        <p>Obtém detalhes de um cliente específico.</p>
+                        <p>Obtém detalhes de um token específico.</p>
                         <h5>Exemplo</h5>
-                        <pre><code>curl -X GET "http://seu-servidor/api/customers/123"</code></pre>
+                        <pre><code>curl -X GET "http://seu-servidor/api/access-tokens/123"</code></pre>
                     </div>
 
                     <div class="endpoint">
                         <h4>
                             <span class="method get">GET</span>
-                            <code>/api/customers/cpf-cnpj/:cpfCnpj</code>
+                            <code>/api/access-tokens/client/:clientId</code>
                         </h4>
-                        <p>Busca um cliente pelo CPF/CNPJ.</p>
+                        <p>Busca um token ativo pelo ID do cliente.</p>
                         <h5>Exemplo</h5>
-                        <pre><code>curl -X GET "http://seu-servidor/api/customers/cpf-cnpj/12345678909"</code></pre>
+                        <pre><code>curl -X GET "http://seu-servidor/api/access-tokens/client/cliente_123"</code></pre>
                     </div>
 
                     <div class="endpoint">
                         <h4>
                             <span class="method patch">PATCH</span>
-                            <code>/api/customers/:id</code>
+                            <code>/api/access-tokens/:id</code>
                         </h4>
-                        <p>Atualiza um cliente existente.</p>
+                        <p>Atualiza um token existente.</p>
                         <h5>Request Body</h5>
                         <pre><code>{
-  "name": "string",                    // Opcional
-  "email": "string",                  // Opcional
-  "phone": "string",                  // Opcional
-  "mobilePhone": "string",            // Opcional
-  "address": "string",                // Opcional
-  "addressNumber": "string",          // Opcional
-  "complement": "string",             // Opcional
-  "province": "string",               // Opcional
-  "postalCode": "string",             // Opcional
-  "externalReference": "string",      // Opcional
-  "notificationDisabled": boolean,    // Opcional
-  "additionalEmails": "string[]",     // Opcional
-  "municipalInscription": "string",   // Opcional
-  "stateInscription": "string",       // Opcional
-  "observations": "string",           // Opcional
-  "groupName": "string",              // Opcional
-  "company": "string"                 // Opcional
+  "accessToken": "string",  // Opcional
+  "description": "string",  // Opcional
+  "isActive": boolean      // Opcional
 }</code></pre>
                         <h5>Exemplo</h5>
-                        <pre><code>curl -X PATCH "http://seu-servidor/api/customers/123" \
+                        <pre><code>curl -X PATCH "http://seu-servidor/api/access-tokens/123" \
   -H "Content-Type: application/json" \
   -d '{
-    "email": "novo.email@exemplo.com",
-    "mobilePhone": "11988888888",
-    "address": "Nova Rua",
-    "addressNumber": "456"
+    "description": "Token atualizado",
+    "isActive": true
   }'</code></pre>
                     </div>
 
                     <div class="endpoint">
                         <h4>
                             <span class="method delete">DELETE</span>
-                            <code>/api/customers/:id</code>
+                            <code>/api/access-tokens/:id</code>
                         </h4>
-                        <p>Remove um cliente.</p>
+                        <p>Remove um token de acesso.</p>
                         <h5>Exemplo</h5>
-                        <pre><code>curl -X DELETE "http://seu-servidor/api/customers/123"</code></pre>
+                        <pre><code>curl -X DELETE "http://seu-servidor/api/access-tokens/123"</code></pre>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method patch">PATCH</span>
+                            <code>/api/access-tokens/:id/activate</code>
+                        </h4>
+                        <p>Ativa um token de acesso.</p>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X PATCH "http://seu-servidor/api/access-tokens/123/activate"</code></pre>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method patch">PATCH</span>
+                            <code>/api/access-tokens/:id/deactivate</code>
+                        </h4>
+                        <p>Desativa um token de acesso.</p>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X PATCH "http://seu-servidor/api/access-tokens/123/deactivate"</code></pre>
                     </div>
 
                     <div class="alert alert-info">
-                        <h5><i class="bi bi-info-circle"></i> Sincronização com Asaas</h5>
+                        <h5><i class="bi bi-info-circle"></i> Gerenciamento de Tokens</h5>
                         <p class="mb-0">
-                            Todos os clientes são sincronizados automaticamente com o Asaas.
-                            O campo <code>asaasId</code> é usado para manter a referência com o cliente no Asaas.
+                            Você também pode gerenciar os tokens através da interface administrativa em <code>/admin</code>.
+                            A interface oferece uma forma mais amigável de visualizar, criar, editar e remover tokens.
                         </p>
                     </div>
 
                     <div class="alert alert-warning">
                         <h5><i class="bi bi-exclamation-triangle"></i> Boas Práticas</h5>
                         <ul class="mb-0">
-                            <li>Mantenha os dados do cliente sempre atualizados</li>
-                            <li>Use o CPF/CNPJ como identificador único do cliente</li>
-                            <li>Forneça pelo menos um email e um telefone para contato</li>
-                            <li>Preencha o endereço completo para emissão de boletos</li>
-                            <li>Use o campo <code>externalReference</code> para referência do seu sistema</li>
+                            <li>Mantenha um token diferente para cada cliente</li>
+                            <li>Use descrições claras para identificar o propósito de cada token</li>
+                            <li>Desative tokens que não estão mais em uso</li>
+                            <li>Nunca compartilhe tokens entre ambientes (Sandbox/Produção)</li>
+                            <li>Monitore regularmente os tokens ativos</li>
                         </ul>
                     </div>
                 </section>
@@ -295,4 +263,4 @@
         });
     </script>
 </body>
-</html>
+</html> 
