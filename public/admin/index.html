@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciamento de Tokens Asaas</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <style>
+      .login-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      .token-container {
+        display: none;
+        margin-top: 20px;
+      }
+      .token-card {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+      }
+      .token-status {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+      }
+      .status-active {
+        background-color: #28a745;
+      }
+      .status-inactive {
+        background-color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Login Form -->
+      <div id="loginForm" class="login-container">
+        <h2 class="text-center mb-4">Acesso Administrativo</h2>
+        <form id="adminLoginForm">
+          <div class="mb-3">
+            <label for="password" class="form-label">Senha de Acesso</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Entrar</button>
+        </form>
+      </div>
+
+      <!-- Token Management Interface -->
+      <div id="tokenManagement" class="token-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>Gerenciamento de Tokens</h2>
+          <button
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#addTokenModal"
+          >
+            <i class="bi bi-plus-circle"></i> Novo Token
+          </button>
+        </div>
+
+        <!-- Estado de "Sem Tokens" -->
+        <div id="noTokensState" class="text-center py-5" style="display: none;">
+          <i class="bi bi-key fs-1 text-muted mb-3"></i>
+          <h3 class="text-muted">Nenhum token cadastrado</h3>
+          <p class="text-muted">Clique no botão "Novo Token" para adicionar seu primeiro token.</p>
+        </div>
+
+        <!-- Estado de Erro -->
+        <div id="errorState" class="text-center py-5" style="display: none;">
+          <i class="bi bi-exclamation-triangle fs-1 text-danger mb-3"></i>
+          <h3 class="text-danger">Erro ao carregar tokens</h3>
+          <p class="text-muted">Não foi possível carregar os tokens. Por favor, tente novamente.</p>
+          <button class="btn btn-outline-primary mt-3" onclick="loadTokens()">
+            <i class="bi bi-arrow-clockwise"></i> Tentar novamente
+          </button>
+        </div>
+
+        <div id="tokensList" class="row">
+          <!-- Tokens will be listed here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Token Modal -->
+    <div class="modal fade" id="addTokenModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Adicionar Novo Token</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="addTokenForm">
+              <div class="mb-3">
+                <label for="newClientId" class="form-label">ID do Cliente</label>
+                <input type="text" class="form-control" id="newClientId" required />
+              </div>
+              <div class="mb-3">
+                <label for="newAccessToken" class="form-label">Token de Acesso</label>
+                <input type="text" class="form-control" id="newAccessToken" required />
+              </div>
+              <div class="mb-3">
+                <label for="newDescription" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="newDescription" required />
+              </div>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="newIsActive" checked />
+                  <label class="form-check-label" for="newIsActive">Token Ativo</label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="saveNewToken">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Token Modal -->
+    <div class="modal fade" id="editTokenModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Editar Token</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editTokenForm">
+              <input type="hidden" id="editTokenId" />
+              <div class="mb-3">
+                <label for="editClientId" class="form-label">ID do Cliente</label>
+                <input type="text" class="form-control" id="editClientId" required />
+              </div>
+              <div class="mb-3">
+                <label for="editAccessToken" class="form-label">Token de Acesso</label>
+                <input type="text" class="form-control" id="editAccessToken" required />
+              </div>
+              <div class="mb-3">
+                <label for="editDescription" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="editDescription" required />
+              </div>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="editIsActive" />
+                  <label class="form-check-label" for="editIsActive">Token Ativo</label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="saveEditToken">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Admin authentication
+      const ADMIN_PASSWORD = 'admin'; // Will be replaced by server
+      let isAuthenticated = false;
+
+      document
+        .getElementById('adminLoginForm')
+        .addEventListener('submit', function (e) {
+          e.preventDefault();
+          const password = document.getElementById('password').value;
+
+          if (password === ADMIN_PASSWORD) {
+            isAuthenticated = true;
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('tokenManagement').style.display = 'block';
+            loadTokens();
+          } else {
+            alert('Senha incorreta');
+          }
+        });
+
+      // Token Management Functions
+      async function loadTokens() {
+        try {
+          // Esconder todos os estados
+          document.getElementById('noTokensState').style.display = 'none';
+          document.getElementById('errorState').style.display = 'none';
+          document.getElementById('tokensList').style.display = 'block';
+
+          console.log('Iniciando chamada para API de tokens...');
+          const response = await fetch('/api/access-tokens', {
+            headers: {
+              Authorization: `Bearer ${ADMIN_PASSWORD}`,
+            },
+          });
+
+          console.log('Resposta da API:', response.status, response.statusText);
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Erro na resposta:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const tokens = await response.json();
+          console.log('Tokens recebidos:', tokens);
+          
+          if (!tokens || tokens.length === 0) {
+            console.log('Nenhum token encontrado');
+            document.getElementById('noTokensState').style.display = 'block';
+            document.getElementById('tokensList').style.display = 'none';
+            return;
+          }
+
+          displayTokens(tokens);
+        } catch (error) {
+          console.error('Erro ao carregar tokens:', error);
+          // Mostrar estado de erro
+          document.getElementById('errorState').style.display = 'block';
+          document.getElementById('tokensList').style.display = 'none';
+        }
+      }
+
+      function displayTokens(tokens) {
+        const tokensList = document.getElementById('tokensList');
+        if (!tokens || tokens.length === 0) {
+          document.getElementById('noTokensState').style.display = 'block';
+          tokensList.style.display = 'none';
+          return;
+        }
+
+        tokensList.style.display = 'block';
+        tokensList.innerHTML = tokens
+          .map(
+            (token) => `
+                <div class="col-md-6 mb-3">
+                    <div class="token-card">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5>${token.clientId}</h5>
+                                <p class="mb-1">
+                                    <span class="token-status ${token.isActive ? 'status-active' : 'status-inactive'}"></span>
+                                    ${token.isActive ? 'Ativo' : 'Inativo'}
+                                </p>
+                                <p class="text-muted small">${token.description}</p>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editToken('${token.id}')">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteToken('${token.id}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+          )
+          .join('');
+      }
+
+      // Add Token
+      document.getElementById('saveNewToken').addEventListener('click', async function () {
+        const tokenData = {
+          clientId: document.getElementById('newClientId').value,
+          accessToken: document.getElementById('newAccessToken').value,
+          description: document.getElementById('newDescription').value,
+          isActive: document.getElementById('newIsActive').checked,
+        };
+
+        try {
+          const response = await fetch('/api/access-tokens', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${ADMIN_PASSWORD}`,
+            },
+            body: JSON.stringify(tokenData),
+          });
+
+          if (response.ok) {
+            bootstrap.Modal.getInstance(document.getElementById('addTokenModal')).hide();
+            loadTokens();
+            document.getElementById('addTokenForm').reset();
+          } else {
+            const error = await response.json();
+            throw new Error(error.message || 'Erro ao salvar token');
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          alert(error.message || 'Erro ao salvar token');
+        }
+      });
+
+      // Edit Token
+      async function editToken(id) {
+        try {
+          const response = await fetch(`/api/access-tokens/${id}`, {
+            headers: {
+              Authorization: `Bearer ${ADMIN_PASSWORD}`,
+            },
+          });
+          
+          if (!response.ok) {
+            throw new Error('Erro ao carregar token');
+          }
+
+          const token = await response.json();
+
+          // Populate edit modal with token data
+          document.getElementById('editTokenId').value = token.id;
+          document.getElementById('editClientId').value = token.clientId;
+          document.getElementById('editAccessToken').value = token.accessToken;
+          document.getElementById('editDescription').value = token.description;
+          document.getElementById('editIsActive').checked = token.isActive;
+
+          // Show edit modal
+          const modal = new bootstrap.Modal(document.getElementById('editTokenModal'));
+          modal.show();
+        } catch (error) {
+          console.error('Erro:', error);
+          alert('Erro ao carregar token');
+        }
+      }
+
+      // Save Edit Token
+      document.getElementById('saveEditToken').addEventListener('click', async function () {
+        const id = document.getElementById('editTokenId').value;
+        const tokenData = {
+          clientId: document.getElementById('editClientId').value,
+          accessToken: document.getElementById('editAccessToken').value,
+          description: document.getElementById('editDescription').value,
+          isActive: document.getElementById('editIsActive').checked,
+        };
+
+        try {
+          const response = await fetch(`/api/access-tokens/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${ADMIN_PASSWORD}`,
+            },
+            body: JSON.stringify(tokenData),
+          });
+
+          if (response.ok) {
+            bootstrap.Modal.getInstance(document.getElementById('editTokenModal')).hide();
+            loadTokens();
+            document.getElementById('editTokenForm').reset();
+          } else {
+            const error = await response.json();
+            throw new Error(error.message || 'Erro ao atualizar token');
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          alert(error.message || 'Erro ao atualizar token');
+        }
+      });
+
+      // Delete Token
+      async function deleteToken(id) {
+        if (confirm('Tem certeza que deseja excluir este token?')) {
+          try {
+            const response = await fetch(`/api/access-tokens/${id}`, {
+              method: 'DELETE',
+              headers: {
+                Authorization: `Bearer ${ADMIN_PASSWORD}`,
+              },
+            });
+
+            if (response.ok) {
+              loadTokens();
+            } else {
+              throw new Error('Erro ao excluir token');
+            }
+          } catch (error) {
+            console.error('Erro:', error);
+            alert('Erro ao excluir token');
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
