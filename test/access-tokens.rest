@@ -20,6 +20,10 @@ Content-Type: {{contentType}}
 GET {{baseUrl}}/api/access-tokens/f777e50e-0eb1-4143-b870-67ecffd8dc4d
 Content-Type: {{contentType}}
 
+### Buscar token ativo de um cliente pelo clientId
+GET {{baseUrl}}/api/access-tokens/client/RHtrip-SANDBOX-token
+Content-Type: {{contentType}}
+
 ### Atualizar um access token (substitua {id} pelo ID real)
 PATCH {{baseUrl}}/api/access-tokens/f777e50e-0eb1-4143-b870-67ecffd8dc4d
 Content-Type: {{contentType}}
