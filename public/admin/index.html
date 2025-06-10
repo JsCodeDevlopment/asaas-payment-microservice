@@ -106,69 +106,72 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Adicionar Novo Token</h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
             <form id="addTokenForm">
               <div class="mb-3">
-                <label for="clientId" class="form-label">ID do Cliente</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="clientId"
-                  required
-                />
+                <label for="newClientId" class="form-label">ID do Cliente</label>
+                <input type="text" class="form-control" id="newClientId" required />
               </div>
               <div class="mb-3">
-                <label for="accessToken" class="form-label"
-                  >Token de Acesso</label
-                >
-                <input
-                  type="text"
-                  class="form-control"
-                  id="accessToken"
-                  required
-                />
+                <label for="newAccessToken" class="form-label">Token de Acesso</label>
+                <input type="text" class="form-control" id="newAccessToken" required />
               </div>
               <div class="mb-3">
-                <label for="description" class="form-label">Descrição</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="description"
-                  required
-                />
+                <label for="newDescription" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="newDescription" required />
               </div>
               <div class="mb-3">
                 <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="isActive"
-                    checked
-                  />
-                  <label class="form-check-label" for="isActive">
-                    Token Ativo
-                  </label>
+                  <input class="form-check-input" type="checkbox" id="newIsActive" checked />
+                  <label class="form-check-label" for="newIsActive">Token Ativo</label>
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Cancelar
-            </button>
-            <button type="button" class="btn btn-primary" id="saveToken">
-              Salvar
-            </button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="saveNewToken">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Token Modal -->
+    <div class="modal fade" id="editTokenModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Editar Token</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editTokenForm">
+              <input type="hidden" id="editTokenId" />
+              <div class="mb-3">
+                <label for="editClientId" class="form-label">ID do Cliente</label>
+                <input type="text" class="form-control" id="editClientId" required />
+              </div>
+              <div class="mb-3">
+                <label for="editAccessToken" class="form-label">Token de Acesso</label>
+                <input type="text" class="form-control" id="editAccessToken" required />
+              </div>
+              <div class="mb-3">
+                <label for="editDescription" class="form-label">Descrição</label>
+                <input type="text" class="form-control" id="editDescription" required />
+              </div>
+              <div class="mb-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="editIsActive" />
+                  <label class="form-check-label" for="editIsActive">Token Ativo</label>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="saveEditToken">Salvar</button>
           </div>
         </div>
       </div>
@@ -278,40 +281,37 @@
       }
 
       // Add Token
-      document
-        .getElementById('saveToken')
-        .addEventListener('click', async function () {
-          const tokenData = {
-            clientId: document.getElementById('clientId').value,
-            accessToken: document.getElementById('accessToken').value,
-            description: document.getElementById('description').value,
-            isActive: document.getElementById('isActive').checked,
-          };
+      document.getElementById('saveNewToken').addEventListener('click', async function () {
+        const tokenData = {
+          clientId: document.getElementById('newClientId').value,
+          accessToken: document.getElementById('newAccessToken').value,
+          description: document.getElementById('newDescription').value,
+          isActive: document.getElementById('newIsActive').checked,
+        };
 
-          try {
-            const response = await fetch('/api/access-tokens', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${ADMIN_PASSWORD}`,
-              },
-              body: JSON.stringify(tokenData),
-            });
+        try {
+          const response = await fetch('/api/access-tokens', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${ADMIN_PASSWORD}`,
+            },
+            body: JSON.stringify(tokenData),
+          });
 
-            if (response.ok) {
-              bootstrap.Modal.getInstance(
-                document.getElementById('addTokenModal'),
-              ).hide();
-              loadTokens();
-              document.getElementById('addTokenForm').reset();
-            } else {
-              throw new Error('Erro ao salvar token');
-            }
-          } catch (error) {
-            console.error('Erro:', error);
-            alert('Erro ao salvar token');
+          if (response.ok) {
+            bootstrap.Modal.getInstance(document.getElementById('addTokenModal')).hide();
+            loadTokens();
+            document.getElementById('addTokenForm').reset();
+          } else {
+            const error = await response.json();
+            throw new Error(error.message || 'Erro ao salvar token');
           }
-        });
+        } catch (error) {
+          console.error('Erro:', error);
+          alert(error.message || 'Erro ao salvar token');
+        }
+      });
 
       // Edit Token
       async function editToken(id) {
@@ -321,54 +321,62 @@
               Authorization: `Bearer ${ADMIN_PASSWORD}`,
             },
           });
+          
+          if (!response.ok) {
+            throw new Error('Erro ao carregar token');
+          }
+
           const token = await response.json();
 
-          // Populate modal with token data
-          document.getElementById('clientId').value = token.clientId;
-          document.getElementById('accessToken').value = token.accessToken;
-          document.getElementById('description').value = token.description;
-          document.getElementById('isActive').checked = token.isActive;
+          // Populate edit modal with token data
+          document.getElementById('editTokenId').value = token.id;
+          document.getElementById('editClientId').value = token.clientId;
+          document.getElementById('editAccessToken').value = token.accessToken;
+          document.getElementById('editDescription').value = token.description;
+          document.getElementById('editIsActive').checked = token.isActive;
 
-          // Show modal
-          const modal = new bootstrap.Modal(
-            document.getElementById('addTokenModal'),
-          );
+          // Show edit modal
+          const modal = new bootstrap.Modal(document.getElementById('editTokenModal'));
           modal.show();
-
-          // Update save button to handle edit
-          document.getElementById('saveToken').onclick = async () => {
-            try {
-              const response = await fetch(`/api/access-tokens/${id}`, {
-                method: 'PATCH',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${ADMIN_PASSWORD}`,
-                },
-                body: JSON.stringify({
-                  clientId: document.getElementById('clientId').value,
-                  accessToken: document.getElementById('accessToken').value,
-                  description: document.getElementById('description').value,
-                  isActive: document.getElementById('isActive').checked,
-                }),
-              });
-
-              if (response.ok) {
-                modal.hide();
-                loadTokens();
-                document.getElementById('addTokenForm').reset();
-              } else {
-                throw new Error('Erro ao atualizar token');
-              }
-            } catch (error) {
-              console.error('Erro:', error);
-              alert('Erro ao atualizar token');
-            }
-          };
         } catch (error) {
           console.error('Erro:', error);
           alert('Erro ao carregar token');
         }
       }
+
+      // Save Edit Token
+      document.getElementById('saveEditToken').addEventListener('click', async function () {
+        const id = document.getElementById('editTokenId').value;
+        const tokenData = {
+          clientId: document.getElementById('editClientId').value,
+          accessToken: document.getElementById('editAccessToken').value,
+          description: document.getElementById('editDescription').value,
+          isActive: document.getElementById('editIsActive').checked,
+        };
+
+        try {
+          const response = await fetch(`/api/access-tokens/${id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${ADMIN_PASSWORD}`,
+            },
+            body: JSON.stringify(tokenData),
+          });
+
+          if (response.ok) {
+            bootstrap.Modal.getInstance(document.getElementById('editTokenModal')).hide();
+            loadTokens();
+            document.getElementById('editTokenForm').reset();
+          } else {
+            const error = await response.json();
+            throw new Error(error.message || 'Erro ao atualizar token');
+          }
+        } catch (error) {
+          console.error('Erro:', error);
+          alert(error.message || 'Erro ao atualizar token');
+        }
+      });
 
       // Delete Token
       async function deleteToken(id) {
