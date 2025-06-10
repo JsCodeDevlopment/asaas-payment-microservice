@@ -73,6 +73,20 @@ export class AccessTokensService {
     updateAccessTokenDto: UpdateAccessTokenDto,
   ): Promise<AccessToken> {
     const accessToken = await this.findOne(id);
+
+    if (
+      updateAccessTokenDto.clientId &&
+      updateAccessTokenDto.clientId !== accessToken.clientId
+    ) {
+      const existingToken = await this.accessTokenRepository.findOne({
+        where: { clientId: updateAccessTokenDto.clientId },
+      });
+
+      if (existingToken) {
+        throw new ConflictException('Client ID already exists');
+      }
+    }
+
     Object.assign(accessToken, updateAccessTokenDto);
     return this.accessTokenRepository.save(accessToken);
   }
