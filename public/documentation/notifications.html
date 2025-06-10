@@ -1,269 +1,272 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Documentação - Payment Gateway Microservice Asaas</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificações - Gateway de Pagamentos Asaas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-      body {
-        display: flex;
-        margin: 0;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
-        min-height: 100vh;
-      }
-      nav {
-        width: 230px;
-        background: #222e3a;
-        color: #fff;
-        padding: 2rem 1.5rem;
-        height: 100vh;
-        box-sizing: border-box;
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
-      }
-      nav h2 {
-        margin-top: 0;
-        font-size: 1.3rem;
-        letter-spacing: 1px;
-        margin-bottom: 2rem;
-      }
-      nav a {
-        display: block;
-        margin-bottom: 1rem;
-        text-decoration: none;
-        color: #cfd8dc;
-        font-weight: 500;
-        transition: color 0.2s;
-        border-left: 3px solid transparent;
-        padding-left: 0.5rem;
-      }
-      nav a:hover {
-        color: #fff;
-        border-left: 3px solid #4f8cff;
-        background: rgba(79, 140, 255, 0.07);
-        border-radius: 4px;
-      }
-      main {
-        flex: 1;
-        padding: 3rem 4rem;
-        max-width: 900px;
-        margin: 2rem auto;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
-      }
-      h1 {
-        margin-top: 0;
-        font-size: 2.2rem;
-        color: #222e3a;
-      }
-      .subtitle {
-        color: #4f8cff;
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
-      }
-      ul.features {
-        margin: 2rem 0 2rem 1.5rem;
-        padding: 0;
-        color: #333;
-      }
-      ul.features li {
-        margin-bottom: 0.7rem;
-        font-size: 1.05rem;
-      }
-      .info-box {
-        background: #f4f8ff;
-        border-left: 4px solid #4f8cff;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1.5rem;
-        border-radius: 6px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 2rem;
-        background: #f8fafc;
-        border-radius: 8px;
-        overflow: hidden;
-      }
-      th,
-      td {
-        padding: 0.7rem 1rem;
-        border-bottom: 1px solid #e0e7ef;
-        text-align: left;
-      }
-      th {
-        background: #e0e7ef;
-        color: #222e3a;
-        font-weight: 600;
-      }
-      code {
-        background: #f4f8ff;
-        color: #222e3a;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 1em;
-      }
-      pre {
-        background: #f4f8ff;
-        padding: 1rem;
-        border-radius: 6px;
-        overflow-x: auto;
-        font-size: 1em;
-        margin-bottom: 2rem;
-      }
-      @media (max-width: 900px) {
-        main {
-          padding: 1.5rem 0.5rem;
-          margin: 0.5rem;
+        .endpoint {
+            border-left: 4px solid #0d6efd;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
         }
-        nav {
-          width: 100px;
-          padding: 1rem 0.5rem;
+        .method {
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: white;
         }
-      }
+        .get { background-color: #0d6efd; }
+        .post { background-color: #198754; }
+        .put { background-color: #fd7e14; }
+        .patch { background-color: #6f42c1; }
+        .delete { background-color: #dc3545; }
+        .required { color: #dc3545; }
+        .optional { color: #6c757d; }
+        .nav-link.active {
+            background-color: #0d6efd !important;
+            color: white !important;
+        }
+        .nav-link {
+            color: #0d6efd;
+        }
+        .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.25rem;
+        }
+        .environment-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-left: 0.5rem;
+        }
+        .sandbox { background-color: #ffc107; color: #000; }
+        .prod { background-color: #198754; color: #fff; }
     </style>
-  </head>
-  <body>
-    <nav>
-      <h2>Documentação</h2>
-      <a
-        href="/"
-        style="
-          display: inline-block;
-          margin-bottom: 2rem;
-          background: #4f8cff;
-          color: #fff;
-          padding: 0.5rem 1rem;
-          border-radius: 5px;
-          font-weight: 600;
-          text-align: center;
-        "
-        >← Voltar ao Início</a
-      >
-      <a href="/documentation/index.html">Boas Vindas</a>
-      <a href="/documentation/introduction.html">Introdução</a>
-      <a href="/documentation/customers.html">Clientes</a>
-      <a href="/documentation/payments.html">Pagamentos</a>
-      <a href="/documentation/notifications.html">Notificações</a>
-    </nav>
-    <main>
-      <h1>Notificações</h1>
-      <div class="subtitle">
-        Gerencie notificações de clientes, incluindo consulta e atualização de
-        preferências de envio.
-      </div>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="min-height: 100vh;">
+                <div class="position-sticky pt-3">
+                    <h5 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+                        <span>Documentação da API</span>
+                    </h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="introduction.html">
+                                <i class="bi bi-info-circle"></i> Introdução
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="authentication.html">
+                                <i class="bi bi-shield-lock"></i> Autenticação
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="access-tokens.html">
+                                <i class="bi bi-key"></i> Access Tokens
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="customers.html">
+                                <i class="bi bi-people"></i> Clientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="payments.html">
+                                <i class="bi bi-credit-card"></i> Pagamentos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="payment-links.html">
+                                <i class="bi bi-link"></i> Links de Pagamento
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="notifications.html">
+                                <i class="bi bi-bell"></i> Notificações
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.html">
+                                <i class="bi bi-gear"></i> Interface Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-      <h2>Endpoints</h2>
-      <ul class="features">
-        <li>
-          <b>GET</b> <code>/notifications/customer/:id</code> — Lista
-          notificações de um cliente
-        </li>
-        <li>
-          <b>PUT</b> <code>/notifications/:id</code> — Atualiza uma notificação
-        </li>
-        <li>
-          <b>PUT</b> <code>/notifications/batch</code> — Atualiza notificações
-          em lote
-        </li>
-      </ul>
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <h1>Notificações</h1>
+                <p class="lead">Gerencie as notificações de eventos do gateway de pagamentos</p>
 
-      <h2>Parâmetros Comuns</h2>
-      <table>
-        <tr>
-          <th>Header</th>
-          <th>Descrição</th>
-          <th>Obrigatório</th>
-        </tr>
-        <tr>
-          <td><code>access_token</code></td>
-          <td>API Key do Asaas para autenticação</td>
-          <td>Sim</td>
-        </tr>
-      </table>
-      <table>
-        <tr>
-          <th>Query</th>
-          <th>Descrição</th>
-          <th>Obrigatório</th>
-        </tr>
-        <tr>
-          <td><code>environment</code></td>
-          <td>
-            Escolhe o ambiente Asaas (<code>SANDBOX</code> ou <code>PROD</code>)
-          </td>
-          <td>Não (padrão: <code>SANDBOX</code>)</td>
-        </tr>
-      </table>
+                <section class="mb-5">
+                    <h2>Webhooks</h2>
+                    <p>O gateway de pagamentos envia notificações em tempo real sobre eventos importantes através de webhooks. Configure uma URL em seu sistema para receber estas notificações.</p>
 
-      <h2>Exemplo de Resposta</h2>
-      <pre><code>{
-  "id": "noti_123",
-  "customer": "cus_456",
-  "event": "PAYMENT_RECEIVED",
-  "media": "EMAIL",
-  "enabled": true
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Eventos Disponíveis</h5>
+                        <ul class="mb-0">
+                            <li><code>PAYMENT_CREATED</code>: Novo pagamento criado</li>
+                            <li><code>PAYMENT_UPDATED</code>: Status do pagamento atualizado</li>
+                            <li><code>PAYMENT_CONFIRMED</code>: Pagamento confirmado</li>
+                            <li><code>PAYMENT_OVERDUE</code>: Pagamento vencido</li>
+                            <li><code>PAYMENT_DELETED</code>: Pagamento removido</li>
+                            <li><code>PAYMENT_RESTORED</code>: Pagamento restaurado</li>
+                            <li><code>PAYMENT_REFUNDED</code>: Pagamento reembolsado</li>
+                            <li><code>PAYMENT_RECEIVED</code>: Pagamento recebido</li>
+                            <li><code>PAYMENT_ANTICIPATED</code>: Pagamento antecipado</li>
+                        </ul>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method post">POST</span>
+                            <code>/api/notifications/webhook</code>
+                        </h4>
+                        <p>Endpoint para receber notificações de eventos do gateway.</p>
+                        <h5>Request Body</h5>
+                        <pre><code>{
+  "event": "string",           // Tipo do evento
+  "payment": {                // Dados do pagamento
+    "id": "string",
+    "customerId": "string",
+    "value": number,
+    "status": "string",
+    "billingType": "string",
+    "dueDate": "string",
+    "description": "string",
+    "externalReference": "string",
+    "asaasId": "string",
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
 }</code></pre>
-
-      <h2>Campos de Notificação</h2>
-      <table>
-        <tr>
-          <th>Campo</th>
-          <th>Tipo</th>
-          <th>Descrição</th>
-        </tr>
-        <tr>
-          <td><code>id</code></td>
-          <td>string</td>
-          <td>Identificador da notificação</td>
-        </tr>
-        <tr>
-          <td><code>customer</code></td>
-          <td>string</td>
-          <td>ID do cliente</td>
-        </tr>
-        <tr>
-          <td><code>event</code></td>
-          <td>string</td>
-          <td>Evento relacionado (ex: <code>PAYMENT_RECEIVED</code>)</td>
-        </tr>
-        <tr>
-          <td><code>media</code></td>
-          <td>string</td>
-          <td>
-            Meio de envio (<code>EMAIL</code>, <code>SMS</code>,
-            <code>WHATSAPP</code>, <code>VOICE</code>)
-          </td>
-        </tr>
-        <tr>
-          <td><code>enabled</code></td>
-          <td>boolean</td>
-          <td>Se a notificação está ativa</td>
-        </tr>
-      </table>
-
-      <h2>Exemplo de Atualização</h2>
-      <pre><code>{
-  "media": "EMAIL",
-  "enabled": false
+                        <h5>Exemplo</h5>
+                        <pre><code>{
+  "event": "PAYMENT_CONFIRMED",
+  "payment": {
+    "id": "123",
+    "customerId": "456",
+    "value": 99.90,
+    "status": "CONFIRMED",
+    "billingType": "CREDIT_CARD",
+    "dueDate": "2024-03-15",
+    "description": "Assinatura Premium",
+    "externalReference": "SUB_123",
+    "asaasId": "pay_123456",
+    "createdAt": "2024-03-01T10:00:00Z",
+    "updatedAt": "2024-03-01T10:05:00Z"
+  }
 }</code></pre>
+                    </div>
 
-      <h2>Observações</h2>
-      <ul class="features">
-        <li>
-          Os campos <code>media</code> aceitam apenas: <code>EMAIL</code>,
-          <code>SMS</code>, <code>WHATSAPP</code>, <code>VOICE</code>.
-        </li>
-        <li>
-          O campo <code>enabled</code> define se a notificação será enviada ou
-          não.
-        </li>
-        <li>
-          Para atualizar várias notificações, envie um array de objetos no
-          endpoint <code>/notifications/batch</code>.
-        </li>
-      </ul>
-    </main>
-  </body>
+                    <div class="alert alert-warning">
+                        <h5><i class="bi bi-exclamation-triangle"></i> Boas Práticas</h5>
+                        <ul class="mb-0">
+                            <li>Configure uma URL HTTPS para receber as notificações</li>
+                            <li>Implemente um mecanismo de retry para casos de falha</li>
+                            <li>Valide a autenticidade das notificações recebidas</li>
+                            <li>Processe as notificações de forma assíncrona</li>
+                            <li>Mantenha um log das notificações recebidas</li>
+                            <li>Implemente tratamento de erros adequado</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Segurança</h5>
+                        <p>Para garantir a autenticidade das notificações, o gateway inclui um cabeçalho de assinatura:</p>
+                        <pre><code>X-Asaas-Signature: sha256=hash</code></pre>
+                        <p>O hash é gerado usando o algoritmo SHA-256 com a chave secreta do seu token de acesso. Verifique a assinatura antes de processar a notificação.</p>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2>Endpoints</h2>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method get">GET</span>
+                            <code>/api/notifications</code>
+                        </h4>
+                        <p>Lista todas as notificações registradas.</p>
+                        <h5>Parâmetros de Query</h5>
+                        <pre><code>{
+  "event": "string",          // Filtra por tipo de evento (opcional)
+  "paymentId": "string",      // Filtra por ID do pagamento (opcional)
+  "startDate": "string",      // Data inicial (opcional, YYYY-MM-DD)
+  "endDate": "string",        // Data final (opcional, YYYY-MM-DD)
+  "offset": number,           // Registros a pular (opcional, padrão: 0)
+  "limit": number            // Máximo de registros (opcional, padrão: 10)
+}</code></pre>
+                        <h5>Resposta</h5>
+                        <pre><code>[
+  {
+    "id": "string",
+    "event": "string",
+    "paymentId": "string",
+    "status": "string",
+    "payload": object,
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+]</code></pre>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method get">GET</span>
+                            <code>/api/notifications/:id</code>
+                        </h4>
+                        <p>Obtém detalhes de uma notificação específica.</p>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X GET "http://seu-servidor/api/notifications/123"</code></pre>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method patch">PATCH</span>
+                            <code>/api/notifications/:id</code>
+                        </h4>
+                        <p>Atualiza o status de uma notificação.</p>
+                        <h5>Request Body</h5>
+                        <pre><code>{
+  "status": "string"  // PROCESSED, FAILED, PENDING
+}</code></pre>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X PATCH "http://seu-servidor/api/notifications/123" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "PROCESSED"
+  }'</code></pre>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Ativa o link da página atual
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
 </html>

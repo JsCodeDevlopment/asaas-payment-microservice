@@ -1,526 +1,303 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Documentação - Payment Gateway Microservice Asaas</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamentos - Gateway de Pagamentos Asaas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-      body {
-        display: flex;
-        margin: 0;
-        font-family: 'Segoe UI', Arial, sans-serif;
-        background: linear-gradient(120deg, #f8fafc 0%, #e0e7ef 100%);
-        min-height: 100vh;
-      }
-      nav {
-        width: 230px;
-        background: #222e3a;
-        color: #fff;
-        padding: 2rem 1.5rem;
-        height: 100vh;
-        box-sizing: border-box;
-        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
-      }
-      nav h2 {
-        margin-top: 0;
-        font-size: 1.3rem;
-        letter-spacing: 1px;
-        margin-bottom: 2rem;
-      }
-      nav a {
-        display: block;
-        margin-bottom: 1rem;
-        text-decoration: none;
-        color: #cfd8dc;
-        font-weight: 500;
-        transition: color 0.2s;
-        border-left: 3px solid transparent;
-        padding-left: 0.5rem;
-      }
-      nav a:hover {
-        color: #fff;
-        border-left: 3px solid #4f8cff;
-        background: rgba(79, 140, 255, 0.07);
-        border-radius: 4px;
-      }
-      main {
-        flex: 1;
-        padding: 3rem 4rem;
-        max-width: 900px;
-        margin: 2rem auto;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
-      }
-      h1 {
-        margin-top: 0;
-        font-size: 2.2rem;
-        color: #222e3a;
-      }
-      .subtitle {
-        color: #4f8cff;
-        font-size: 1.1rem;
-        margin-bottom: 2rem;
-      }
-      ul.features {
-        margin: 2rem 0 2rem 1.5rem;
-        padding: 0;
-        color: #333;
-      }
-      ul.features li {
-        margin-bottom: 0.7rem;
-        font-size: 1.05rem;
-      }
-      .info-box {
-        background: #f4f8ff;
-        border-left: 4px solid #4f8cff;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1.5rem;
-        border-radius: 6px;
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 2rem;
-        background: #f8fafc;
-        border-radius: 8px;
-        overflow: hidden;
-      }
-      th,
-      td {
-        padding: 0.7rem 1rem;
-        border-bottom: 1px solid #e0e7ef;
-        text-align: left;
-      }
-      th {
-        background: #e0e7ef;
-        color: #222e3a;
-        font-weight: 600;
-      }
-      code {
-        background: #f4f8ff;
-        color: #222e3a;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-size: 1em;
-      }
-      pre {
-        background: #f4f8ff;
-        padding: 1rem;
-        border-radius: 6px;
-        overflow-x: auto;
-        font-size: 1em;
-        margin-bottom: 2rem;
-      }
-      @media (max-width: 900px) {
-        main {
-          padding: 1.5rem 0.5rem;
-          margin: 0.5rem;
+        .endpoint {
+            border-left: 4px solid #0d6efd;
+            padding-left: 1rem;
+            margin-bottom: 2rem;
         }
-        nav {
-          width: 100px;
-          padding: 1rem 0.5rem;
+        .method {
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            color: white;
         }
-      }
+        .get { background-color: #0d6efd; }
+        .post { background-color: #198754; }
+        .put { background-color: #fd7e14; }
+        .patch { background-color: #6f42c1; }
+        .delete { background-color: #dc3545; }
+        .required { color: #dc3545; }
+        .optional { color: #6c757d; }
+        .nav-link.active {
+            background-color: #0d6efd !important;
+            color: white !important;
+        }
+        .nav-link {
+            color: #0d6efd;
+        }
+        .nav-link:hover {
+            background-color: #e9ecef;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.25rem;
+        }
+        .environment-badge {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-left: 0.5rem;
+        }
+        .sandbox { background-color: #ffc107; color: #000; }
+        .prod { background-color: #198754; color: #fff; }
     </style>
-  </head>
-  <body>
-    <nav>
-      <h2>Documentação</h2>
-      <a
-        href="/"
-        style="
-          display: inline-block;
-          margin-bottom: 2rem;
-          background: #4f8cff;
-          color: #fff;
-          padding: 0.5rem 1rem;
-          border-radius: 5px;
-          font-weight: 600;
-          text-align: center;
-        "
-        >← Voltar ao Início</a
-      >
-      <a href="/documentation/index.html">Boas Vindas</a>
-      <a href="/documentation/introduction.html">Introdução</a>
-      <a href="/documentation/customers.html">Clientes</a>
-      <a href="/documentation/payments.html">Pagamentos</a>
-      <a href="/documentation/notifications.html">Notificações</a>
-    </nav>
-    <main>
-      <h1>Pagamentos</h1>
-      <div class="subtitle">Gerencie cobranças e pagamentos de clientes.</div>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="min-height: 100vh;">
+                <div class="position-sticky pt-3">
+                    <h5 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+                        <span>Documentação da API</span>
+                    </h5>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="introduction.html">
+                                <i class="bi bi-info-circle"></i> Introdução
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="authentication.html">
+                                <i class="bi bi-shield-lock"></i> Autenticação
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="access-tokens.html">
+                                <i class="bi bi-key"></i> Access Tokens
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="customers.html">
+                                <i class="bi bi-people"></i> Clientes
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="payments.html">
+                                <i class="bi bi-credit-card"></i> Pagamentos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="payment-links.html">
+                                <i class="bi bi-link"></i> Links de Pagamento
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="notifications.html">
+                                <i class="bi bi-bell"></i> Notificações
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="admin.html">
+                                <i class="bi bi-gear"></i> Interface Admin
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-      <!-- CRIAR COBRANÇA (BOLETO/PIX) -->
-      <h2>Criar Cobrança (Boleto/Pix)</h2>
-      <div class="info-box">
-        <strong>Método:</strong> <code>POST /payments</code><br />
-        Cria uma nova cobrança para um cliente via <b>Boleto</b> ou <b>Pix</b>.
-      </div>
-      <h3>Body (JSON)</h3>
-      <table>
-        <tr>
-          <th>Campo</th>
-          <th>Tipo</th>
-          <th>Descrição</th>
-          <th>Obrigatório</th>
-        </tr>
-        <tr>
-          <td><code>customer</code></td>
-          <td>string</td>
-          <td>ID do cliente que irá receber a cobrança</td>
-          <td>Sim</td>
-        </tr>
-        <tr>
-          <td><code>value</code></td>
-          <td>number</td>
-          <td>Valor da cobrança individual</td>
-          <td>Sim</td>
-        </tr>
-        <tr>
-          <td><code>dueDate</code></td>
-          <td>string</td>
-          <td>Data de vencimento da cobrança (YYYY-MM-DD)</td>
-          <td>Sim</td>
-        </tr>
-        <tr>
-          <td><code>billingType</code></td>
-          <td>string</td>
-          <td>Tipo de cobrança: <code>BOLETO</code> ou <code>PIX</code></td>
-          <td>Sim</td>
-        </tr>
-        <tr>
-          <td><code>totalValue</code></td>
-          <td>number</td>
-          <td>Valor total da cobrança (opcional)</td>
-          <td>Não</td>
-        </tr>
-      </table>
-      <h3>Headers</h3>
-      <ul class="features">
-        <li>
-          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
-        </li>
-      </ul>
-      <h3>Parâmetros de Query</h3>
-      <ul class="features">
-        <li>
-          <code>environment</code> (opcional): <code>SANDBOX</code> ou
-          <code>PROD</code>
-        </li>
-      </ul>
-      <h3>Exemplo de Requisição</h3>
-      <pre><code>POST /payments?environment=SANDBOX
-  Headers:
-    access_token: SUA_CHAVE_DE_ACESSO
-  Body:
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <h1>Pagamentos</h1>
+                <p class="lead">Gerencie pagamentos e cobranças através do gateway Asaas</p>
+
+                <section class="mb-5">
+                    <h2>Endpoints</h2>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method get">GET</span>
+                            <code>/api/payments</code>
+                        </h4>
+                        <p>Lista todos os pagamentos cadastrados.</p>
+                        <h5>Parâmetros de Query</h5>
+                        <pre><code>{
+  "customerId": "string",    // ID do cliente (opcional)
+  "status": "string",        // Status do pagamento (opcional)
+  "offset": number,          // Registros a pular (opcional, padrão: 0)
+  "limit": number           // Máximo de registros (opcional, padrão: 10)
+}</code></pre>
+                        <h5>Resposta</h5>
+                        <pre><code>[
   {
-    "customer": "cus_000006671674",
-    "value": 100,
-    "dueDate": "2025-05-01",
-    "billingType": "BOLETO",
-    "totalValue": 0
-  }</code></pre>
-      <h3>Exemplo de Resposta</h3>
-      <pre><code>{
-    "id": "pay_987654321",
-    "status": "PENDING",
-    "dueDate": "2025-05-01",
+    "id": "string",
+    "customerId": "string",
+    "value": number,
+    "dueDate": "string",
+    "description": "string",
+    "billingType": "string",
+    "status": "string",
+    "invoiceUrl": "string",
+    "invoiceNumber": "string",
+    "externalReference": "string",
+    "asaasId": "string",
+    "createdAt": "string",
+    "updatedAt": "string"
+  }
+]</code></pre>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method post">POST</span>
+                            <code>/api/payments</code>
+                        </h4>
+                        <p>Cria um novo pagamento.</p>
+                        <h5>Request Body</h5>
+                        <pre><code>{
+  "customerId": "string",           // ID do cliente
+  "value": number,                  // Valor do pagamento
+  "dueDate": "string",             // Data de vencimento (YYYY-MM-DD)
+  "description": "string",         // Descrição do pagamento
+  "billingType": "string",         // Tipo de cobrança (BOLETO, CREDIT_CARD, PIX)
+  "externalReference": "string",   // Referência externa (opcional)
+  "installmentDescription": "string", // Descrição da parcela (opcional)
+  "installmentValue": number,      // Valor da parcela (opcional)
+  "installmentCount": number,      // Número de parcelas (opcional)
+  "discount": {                    // Desconto (opcional)
+    "value": number,               // Valor do desconto
+    "dueDateLimitDays": number    // Dias de antecedência
+  },
+  "fine": {                       // Multa (opcional)
+    "value": number,              // Valor da multa
+    "type": "string"             // Tipo (FIXED ou PERCENTAGE)
+  },
+  "interest": {                   // Juros (opcional)
+    "value": number,             // Valor dos juros
+    "type": "string"            // Tipo (FIXED ou PERCENTAGE)
+  }
+}</code></pre>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X POST "http://seu-servidor/api/payments" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customerId": "cus_123",
     "value": 100.00,
-    "billingType": "BOLETO"
-  }</code></pre>
-
-      <!-- CRIAR COBRANÇA CARTÃO DE CRÉDITO -->
-      <h2>Criar Cobrança Cartão de Crédito</h2>
-      <div class="info-box">
-        <strong>Método:</strong> <code>POST /payments/credit-card</code><br />
-        Cria uma nova cobrança para um cliente via <b>Cartão de Crédito</b>.
-      </div>
-      <h3>Body (JSON)</h3>
-      <table>
-        <tr>
-          <th>Campo</th>
-          <th>Tipo</th>
-          <th>Descrição</th>
-          <th>Obrigatório</th>
-        </tr>
-        <tr>
-          <td><code>customer</code></td>
-          <td>string</td>
-          <td>ID do cliente</td>
-          <td>Sim</td>
-        </tr>
-        <tr>
-          <td><code>value</code></td>
-          <td>number</td>
-          <td>Valor da cobrança individual (ou use <code>totalValue</code>)</td>
-          <td>Sim*</td>
-        </tr>
-        <tr>
-          <td><code>dueDate</code></td>
-          <td>string</td>
-          <td>Data de vencimento (YYYY-MM-DD)</td>
-          <td>Sim</td>
-        </tr>
-        <tr>
-          <td><code>installmentCount</code></td>
-          <td>number</td>
-          <td>Número de parcelas (opcional)</td>
-          <td>Não</td>
-        </tr>
-        <tr>
-          <td><code>totalValue</code></td>
-          <td>number</td>
-          <td>Valor total da cobrança (opcional)</td>
-          <td>Sim*</td>
-        </tr>
-        <tr>
-          <td><code>creditCard</code></td>
-          <td>object</td>
-          <td>Dados do cartão de crédito</td>
-          <td>Sim</td>
-        </tr>
-        <tr>
-          <td><code>creditCardHolderInfo</code></td>
-          <td>object</td>
-          <td>Informações do titular do cartão</td>
-          <td>Sim</td>
-        </tr>
-        <tr>
-          <td><code>remoteIp</code></td>
-          <td>string</td>
-          <td>IP do cliente</td>
-          <td>Sim</td>
-        </tr>
-      </table>
-      <h3>Headers</h3>
-      <ul class="features">
-        <li>
-          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
-        </li>
-      </ul>
-      <h3>Parâmetros de Query</h3>
-      <ul class="features">
-        <li>
-          <code>environment</code> (opcional): <code>SANDBOX</code> ou
-          <code>PROD</code>
-        </li>
-      </ul>
-      <h3>Exemplo de Requisição</h3>
-      <pre><code>POST /payments/credit-card?environment=SANDBOX
-  Headers:
-    access_token: SUA_CHAVE_DE_ACESSO
-  Body:
-  {
-    "customer": "cus_000006671674",
-    "value": 0,
-    "dueDate": "2025-05-01",
-    "installmentCount": 2,
-    "totalValue": 100,
-    "creditCard": {
-    "holderName": "John Doe",
-    "number": "4242424242424242",
-    "expiryMonth": "4",
-    "expiryYear": "2025",
-    "ccv": "123"
+    "dueDate": "2024-03-15",
+    "description": "Pagamento de serviço",
+    "billingType": "BOLETO",
+    "externalReference": "REF_001",
+    "discount": {
+      "value": 10.00,
+      "dueDateLimitDays": 5
     },
-    "creditCardHolderInfo": {
-    "name": "John Doe",
-    "email": "john.doe@asaas.com",
-    "cpfCnpj": "12345678901",
-    "postalCode": "12345678",
-    "addressNumber": "123",
-    "addressComplement": null,
-    "phone": null,
-    "mobilePhone": null
+    "fine": {
+      "value": 2.00,
+      "type": "PERCENTAGE"
     },
-    "remoteIp": "1b67:5bcb:f9da:0e6f:bc5a:5a9c:b299:b66a"
-  }</code></pre>
-      <h3>Exemplo de Resposta</h3>
-      <pre><code>{
-    "id": "pay_abcdef123456",
-    "status": "PENDING",
-    "dueDate": "2025-05-01",
-    "value": 50.00,
-    "billingType": "CREDIT_CARD",
-    "installmentCount": 2
-  }</code></pre>
-
-      <!-- LISTAR COBRANÇAS -->
-      <h2>Listar Cobranças</h2>
-      <div class="info-box">
-        <strong>Método:</strong> <code>GET /payments</code><br />
-        Lista todas as cobranças cadastradas.
-      </div>
-      <h3>Headers</h3>
-      <ul class="features">
-        <li>
-          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
-        </li>
-      </ul>
-      <h3>Parâmetros de Query</h3>
-      <ul class="features">
-        <li>
-          <code>environment</code> (opcional): <code>SANDBOX</code> ou
-          <code>PROD</code>
-        </li>
-        <li>
-          <code>installment</code> (opcional): ID do parcelamento para filtrar
-          cobranças
-        </li>
-        <li><code>offset</code> (opcional): Elemento inicial da lista</li>
-        <li>
-          <code>limit</code> (opcional): Número de elementos da lista (máx: 100)
-        </li>
-        <li>
-          <code>customerId</code> (opcional): ID do cliente para filtrar
-          cobranças
-        </li>
-      </ul>
-      <h3>Exemplo de Requisição</h3>
-      <pre><code>GET /payments?environment=SANDBOX&amp;limit=10
-  Headers:
-    access_token: SUA_CHAVE_DE_ACESSO</code></pre>
-      <h3>Exemplo de Resposta</h3>
-      <pre><code>{
-    "data": [
-    {
-      "id": "pay_987654321",
-      "status": "PENDING",
-      "dueDate": "2025-05-10",
-      "value": 100.00,
-      "billingType": "BOLETO"
+    "interest": {
+      "value": 1.00,
+      "type": "PERCENTAGE"
     }
-    ],
-    "totalCount": 1
-  }</code></pre>
+  }'</code></pre>
+                    </div>
 
-      <!-- OBTER INFORMAÇÕES PIX -->
-      <h2>Obter Informações do PIX</h2>
-      <div class="info-box">
-        <strong>Método:</strong> <code>GET /payments/:id/pix-info</code><br />
-        Obtém informações do PIX (QR Code e Copia e Cola) para uma cobrança.
-      </div>
-      <h3>Headers</h3>
-      <ul class="features">
-        <li>
-          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
-        </li>
-      </ul>
-      <h3>Parâmetros de Query</h3>
-      <ul class="features">
-        <li>
-          <code>environment</code> (opcional): <code>SANDBOX</code> ou
-          <code>PROD</code>
-        </li>
-      </ul>
-      <h3>Exemplo de Requisição</h3>
-      <pre><code>GET /payments/pay_4vyqs3ra7dq3z954/pix-info?environment=SANDBOX
-  Headers:
-    access_token: SUA_CHAVE_DE_ACESSO</code></pre>
-      <h3>Exemplo de Resposta</h3>
-      <pre><code>{
-    "encodedImage": "data:image/png;base64,...",
-    "payload": "00020126360014BR.GOV.BCB.PIX...",
-    "expirationDate": "2025-05-01T23:59:59-03:00"
-  }</code></pre>
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method get">GET</span>
+                            <code>/api/payments/:id</code>
+                        </h4>
+                        <p>Obtém detalhes de um pagamento específico.</p>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X GET "http://seu-servidor/api/payments/123"</code></pre>
+                    </div>
 
-      <!-- DELETAR COBRANÇA -->
-      <h2>Deletar Cobrança</h2>
-      <div class="info-box">
-        <strong>Método:</strong> <code>DELETE /payments/:id</code><br />
-        Remove uma cobrança existente.
-      </div>
-      <h3>Headers</h3>
-      <ul class="features">
-        <li>
-          <code>access_token</code>: Chave de acesso do Asaas (obrigatório)
-        </li>
-      </ul>
-      <h3>Parâmetros de Query</h3>
-      <ul class="features">
-        <li>
-          <code>environment</code> (opcional): <code>SANDBOX</code> ou
-          <code>PROD</code>
-        </li>
-      </ul>
-      <h3>Exemplo de Requisição</h3>
-      <pre><code>DELETE /payments/pay_46jj8py77xxm1gd5?environment=SANDBOX
-  Headers:
-    access_token: SUA_CHAVE_DE_ACESSO</code></pre>
-      <h3>Exemplo de Resposta</h3>
-      <pre><code>{
-    "code": 200,
-    "message": "Cobrança excluída com sucesso."
-  }</code></pre>
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method get">GET</span>
+                            <code>/api/payments/customer/:customerId</code>
+                        </h4>
+                        <p>Lista pagamentos de um cliente específico.</p>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X GET "http://seu-servidor/api/payments/customer/cus_123"</code></pre>
+                    </div>
 
-      <!-- CAMPOS DE RESPOSTA -->
-      <h2>Campos de Resposta</h2>
-      <table>
-        <tr>
-          <th>Campo</th>
-          <th>Tipo</th>
-          <th>Descrição</th>
-        </tr>
-        <tr>
-          <td><code>id</code></td>
-          <td>string</td>
-          <td>ID único da cobrança</td>
-        </tr>
-        <tr>
-          <td><code>status</code></td>
-          <td>string</td>
-          <td>
-            Status da cobrança (<code>PENDING</code>, <code>RECEIVED</code>,
-            etc.)
-          </td>
-        </tr>
-        <tr>
-          <td><code>dueDate</code></td>
-          <td>string</td>
-          <td>Data de vencimento</td>
-        </tr>
-        <tr>
-          <td><code>value</code></td>
-          <td>number</td>
-          <td>Valor da cobrança</td>
-        </tr>
-        <tr>
-          <td><code>billingType</code></td>
-          <td>string</td>
-          <td>
-            Tipo da cobrança (<code>BOLETO</code>, <code>CREDIT_CARD</code>,
-            <code>PIX</code>)
-          </td>
-        </tr>
-      </table>
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method delete">DELETE</span>
+                            <code>/api/payments/:id</code>
+                        </h4>
+                        <p>Remove um pagamento.</p>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X DELETE "http://seu-servidor/api/payments/123"</code></pre>
+                    </div>
 
-      <h2>Observações</h2>
-      <ul class="features">
-        <li>
-          O header <code>access_token</code> é obrigatório em todas as rotas de
-          pagamentos.
-        </li>
-        <li>
-          O parâmetro <code>environment</code> define se a operação será feita
-          em <strong>SANDBOX</strong> (teste) ou
-          <strong>PROD</strong> (produção). Se não informado, o padrão é
-          <code>PROD</code>.
-        </li>
-        <li>
-          Todos os campos obrigatórios devem ser preenchidos para criar uma
-          cobrança.
-        </li>
-        <li>
-          Para cobranças via cartão de crédito, os campos
-          <code>creditCard</code>, <code>creditCardHolderInfo</code> e
-          <code>remoteIp</code> são obrigatórios.
-        </li>
-        <li>
-          Para obter informações PIX, a cobrança deve ter sido criada com
-          <code>billingType: "PIX"</code>.
-        </li>
-      </ul>
-    </main>
-  </body>
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method post">POST</span>
+                            <code>/api/payments/:id/refund</code>
+                        </h4>
+                        <p>Estorna um pagamento.</p>
+                        <h5>Request Body</h5>
+                        <pre><code>{
+  "value": number,           // Valor do estorno (opcional, padrão: valor total)
+  "description": "string"   // Descrição do estorno (opcional)
+}</code></pre>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X POST "http://seu-servidor/api/payments/123/refund" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "value": 50.00,
+    "description": "Estorno parcial"
+  }'</code></pre>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Tipos de Cobrança</h5>
+                        <ul class="mb-0">
+                            <li><code>BOLETO</code>: Gera um boleto bancário</li>
+                            <li><code>CREDIT_CARD</code>: Cobrança via cartão de crédito</li>
+                            <li><code>PIX</code>: Gera um QR Code PIX</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Status de Pagamento</h5>
+                        <ul class="mb-0">
+                            <li><code>PENDING</code>: Aguardando pagamento</li>
+                            <li><code>CONFIRMED</code>: Pagamento confirmado</li>
+                            <li><code>OVERDUE</code>: Pagamento vencido</li>
+                            <li><code>REFUNDED</code>: Pagamento estornado</li>
+                            <li><code>CANCELED</code>: Pagamento cancelado</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h5><i class="bi bi-exclamation-triangle"></i> Boas Práticas</h5>
+                        <ul class="mb-0">
+                            <li>Use o campo <code>externalReference</code> para referência do seu sistema</li>
+                            <li>Configure descontos, multas e juros conforme sua política</li>
+                            <li>Monitore os status dos pagamentos para ações automáticas</li>
+                            <li>Mantenha os dados do cliente atualizados para emissão de boletos</li>
+                            <li>Utilize o sistema de parcelas para cobranças recorrentes</li>
+                        </ul>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Ativa o link da página atual
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPage = window.location.pathname.split('/').pop();
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPage) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
 </html>

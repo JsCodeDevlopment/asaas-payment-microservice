@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Introdução - Gateway de Pagamentos Asaas</title>
+    <title>Autenticação - Gateway de Pagamentos Asaas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -61,12 +61,12 @@
                     </h5>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="introduction.html">
+                            <a class="nav-link" href="introduction.html">
                                 <i class="bi bi-info-circle"></i> Introdução
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="authentication.html">
+                            <a class="nav-link active" href="authentication.html">
                                 <i class="bi bi-shield-lock"></i> Autenticação
                             </a>
                         </li>
@@ -106,143 +106,149 @@
 
             <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                <h1>Introdução</h1>
-                <p class="lead">Gateway de Pagamentos Asaas - Uma solução completa para processamento de pagamentos</p>
+                <h1>Autenticação</h1>
+                <p class="lead">Gerencie a autenticação e segurança da sua integração</p>
 
                 <section class="mb-5">
-                    <h2>Visão Geral</h2>
-                    <p>O Gateway de Pagamentos Asaas é uma solução robusta e flexível para integração com o sistema de pagamentos da Asaas. Ele fornece uma API RESTful que permite:</p>
-                    <ul>
-                        <li>Gerenciamento de clientes</li>
-                        <li>Processamento de pagamentos</li>
-                        <li>Criação de links de pagamento</li>
-                        <li>Recebimento de notificações em tempo real</li>
-                        <li>Gerenciamento de tokens de acesso</li>
-                    </ul>
+                    <h2>Token de Acesso</h2>
+                    <p>Todas as requisições à API devem incluir um token de acesso válido no cabeçalho da requisição.</p>
+
+                    <div class="endpoint">
+                        <h4>
+                            <span class="method get">GET</span>
+                            <code>/api/access-tokens</code>
+                        </h4>
+                        <p>Lista todos os tokens de acesso disponíveis.</p>
+                        <h5>Headers</h5>
+                        <pre><code>Authorization: Bearer seu_token_de_acesso</code></pre>
+                        <h5>Exemplo</h5>
+                        <pre><code>curl -X GET "http://seu-servidor/api/access-tokens" \
+  -H "Authorization: Bearer seu_token_de_acesso"</code></pre>
+                    </div>
 
                     <div class="alert alert-info">
-                        <h5><i class="bi bi-info-circle"></i> Recursos Principais</h5>
-                        <ul class="mb-0">
-                            <li>Suporte a múltiplos métodos de pagamento (Boleto, Cartão de Crédito, PIX)</li>
-                            <li>Ambientes Sandbox e Produção</li>
-                            <li>Webhooks para notificações em tempo real</li>
-                            <li>Interface administrativa para gerenciamento</li>
-                            <li>Documentação completa da API</li>
-                        </ul>
+                        <h5><i class="bi bi-info-circle"></i> Como Obter um Token</h5>
+                        <ol class="mb-0">
+                            <li>Acesse a interface administrativa em <code>/admin</code></li>
+                            <li>Navegue até a seção "Access Tokens"</li>
+                            <li>Clique em "Criar Novo Token"</li>
+                            <li>Selecione o ambiente (Sandbox/Produção)</li>
+                            <li>Copie o token gerado</li>
+                        </ol>
                     </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2>Começando</h2>
-                    <p>Para começar a usar o gateway, siga estes passos:</p>
-
-                    <ol>
-                        <li>
-                            <strong>Obtenha um token de acesso</strong>
-                            <p>Acesse a interface administrativa em <code>/admin</code> e crie um token de acesso para seu ambiente.</p>
-                        </li>
-                        <li>
-                            <strong>Configure o ambiente</strong>
-                            <p>Escolha entre o ambiente Sandbox (para testes) ou Produção (para uso real).</p>
-                        </li>
-                        <li>
-                            <strong>Integre a API</strong>
-                            <p>Use os endpoints da API para integrar o gateway em sua aplicação.</p>
-                        </li>
-                        <li>
-                            <strong>Configure webhooks</strong>
-                            <p>Configure URLs para receber notificações de eventos importantes.</p>
-                        </li>
-                    </ol>
 
                     <div class="alert alert-warning">
-                        <h5><i class="bi bi-exclamation-triangle"></i> Importante</h5>
+                        <h5><i class="bi bi-exclamation-triangle"></i> Segurança</h5>
                         <ul class="mb-0">
-                            <li>Sempre comece com o ambiente Sandbox para testes</li>
-                            <li>Mantenha suas credenciais seguras</li>
-                            <li>Implemente tratamento de erros adequado</li>
-                            <li>Monitore as notificações recebidas</li>
+                            <li>Nunca compartilhe seu token de acesso</li>
+                            <li>Use HTTPS para todas as requisições</li>
+                            <li>Armazene o token de forma segura</li>
+                            <li>Revogue tokens comprometidos imediatamente</li>
                         </ul>
                     </div>
                 </section>
 
                 <section class="mb-5">
                     <h2>Ambientes</h2>
-                    <p>O gateway oferece dois ambientes para diferentes propósitos:</p>
+                    <p>O gateway oferece dois ambientes, cada um com seu próprio conjunto de tokens:</p>
 
                     <div class="alert alert-info">
                         <h5><i class="bi bi-info-circle"></i> Sandbox</h5>
-                        <p>Ambiente de testes com as seguintes características:</p>
+                        <p>Use tokens do ambiente Sandbox para:</p>
                         <ul class="mb-0">
-                            <li>Dados fictícios para testes</li>
-                            <li>Sem cobranças reais</li>
-                            <li>Ideal para desenvolvimento e homologação</li>
-                            <li>Cartões de teste disponíveis</li>
+                            <li>Desenvolvimento e testes</li>
+                            <li>Integração inicial</li>
+                            <li>Validação de fluxos</li>
+                            <li>Testes de webhook</li>
                         </ul>
                     </div>
 
                     <div class="alert alert-info">
                         <h5><i class="bi bi-info-circle"></i> Produção</h5>
-                        <p>Ambiente real com as seguintes características:</p>
+                        <p>Use tokens do ambiente de Produção para:</p>
                         <ul class="mb-0">
                             <li>Processamento real de pagamentos</li>
-                            <li>Cobranças efetivas</li>
-                            <li>Dados reais de clientes</li>
-                            <li>Integração com sistemas bancários</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2>Formato da API</h2>
-                    <p>A API segue o padrão REST e utiliza JSON para todas as requisições e respostas.</p>
-
-                    <div class="alert alert-info">
-                        <h5><i class="bi bi-info-circle"></i> Características</h5>
-                        <ul class="mb-0">
-                            <li>Base URL: <code>http://seu-servidor/api</code></li>
-                            <li>Formato: JSON</li>
-                            <li>Autenticação: Token de acesso</li>
-                            <li>Versão: v1</li>
-                        </ul>
-                    </div>
-
-                    <div class="alert alert-info">
-                        <h5><i class="bi bi-info-circle"></i> Códigos de Status</h5>
-                        <ul class="mb-0">
-                            <li><code>200</code>: Sucesso</li>
-                            <li><code>201</code>: Criado</li>
-                            <li><code>400</code>: Requisição inválida</li>
-                            <li><code>401</code>: Não autorizado</li>
-                            <li><code>403</code>: Proibido</li>
-                            <li><code>404</code>: Não encontrado</li>
-                            <li><code>500</code>: Erro interno</li>
-                        </ul>
-                    </div>
-                </section>
-
-                <section class="mb-5">
-                    <h2>Suporte</h2>
-                    <p>Para obter suporte ou reportar problemas:</p>
-
-                    <div class="alert alert-info">
-                        <h5><i class="bi bi-info-circle"></i> Canais de Suporte</h5>
-                        <ul class="mb-0">
-                            <li>Documentação: Consulte esta documentação</li>
-                            <li>Email: suporte@seudominio.com</li>
-                            <li>GitHub: Reporte issues no repositório</li>
-                            <li>Chat: Suporte em tempo real</li>
+                            <li>Ambiente de produção</li>
+                            <li>Clientes reais</li>
+                            <li>Transações efetivas</li>
                         </ul>
                     </div>
 
                     <div class="alert alert-warning">
-                        <h5><i class="bi bi-exclamation-triangle"></i> Ao Solicitar Suporte</h5>
-                        <p>Forneça as seguintes informações:</p>
+                        <h5><i class="bi bi-exclamation-triangle"></i> Importante</h5>
                         <ul class="mb-0">
-                            <li>Descrição detalhada do problema</li>
-                            <li>Logs de erro (se disponível)</li>
-                            <li>Ambiente (Sandbox/Produção)</li>
-                            <li>Passos para reproduzir o problema</li>
+                            <li>Tokens de Sandbox não funcionam em Produção e vice-versa</li>
+                            <li>Mantenha tokens separados para cada ambiente</li>
+                            <li>Use o ambiente Sandbox até estar pronto para produção</li>
+                            <li>Teste exaustivamente antes de migrar para produção</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2>Erros de Autenticação</h2>
+                    <p>A API retorna códigos de status específicos para erros de autenticação:</p>
+
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Códigos de Erro</h5>
+                        <ul class="mb-0">
+                            <li><code>401 Unauthorized</code>: Token ausente ou inválido</li>
+                            <li><code>403 Forbidden</code>: Token sem permissão para a operação</li>
+                            <li><code>429 Too Many Requests</code>: Limite de requisições excedido</li>
+                        </ul>
+                    </div>
+
+                    <div class="endpoint">
+                        <h4>Exemplo de Resposta de Erro</h4>
+                        <pre><code>{
+  "statusCode": 401,
+  "message": "Token de acesso inválido ou expirado",
+  "error": "Unauthorized"
+}</code></pre>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h5><i class="bi bi-exclamation-triangle"></i> Tratamento de Erros</h5>
+                        <ul class="mb-0">
+                            <li>Implemente retry com backoff exponencial</li>
+                            <li>Monitore erros de autenticação</li>
+                            <li>Mantenha logs de tentativas falhas</li>
+                            <li>Notifique administradores em caso de problemas</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="mb-5">
+                    <h2>Boas Práticas</h2>
+                    <p>Siga estas recomendações para manter sua integração segura:</p>
+
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Gerenciamento de Tokens</h5>
+                        <ul class="mb-0">
+                            <li>Use tokens diferentes para cada cliente/aplicação</li>
+                            <li>Revogue tokens não utilizados</li>
+                            <li>Renove tokens periodicamente</li>
+                            <li>Monitore o uso dos tokens</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle"></i> Segurança</h5>
+                        <ul class="mb-0">
+                            <li>Use HTTPS para todas as requisições</li>
+                            <li>Implemente rate limiting</li>
+                            <li>Valide todas as entradas</li>
+                            <li>Mantenha logs de auditoria</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h5><i class="bi bi-exclamation-triangle"></i> O Que Evitar</h5>
+                        <ul class="mb-0">
+                            <li>Não armazene tokens em código-fonte</li>
+                            <li>Não compartilhe tokens entre ambientes</li>
+                            <li>Não use tokens de produção em desenvolvimento</li>
+                            <li>Não exponha tokens em logs ou mensagens de erro</li>
                         </ul>
                     </div>
                 </section>
@@ -265,4 +271,4 @@
         });
     </script>
 </body>
-</html>
+</html> 
