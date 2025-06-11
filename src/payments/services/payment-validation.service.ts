@@ -18,13 +18,14 @@ export class PaymentValidationService {
     if (!data.dueDate) {
       throw new BadRequestException('O campo dueDate é obrigatório.');
     }
-    if (!data.remoteIp) {
-      throw new BadRequestException('O campo remoteIp é obrigatório.');
-    }
   }
 
   validateCreditCardPayment(data: CreditCardValidation): void {
     this.validateBasePayment(data);
+
+    if (!data.remoteIp) {
+      throw new BadRequestException('O campo remoteIp é obrigatório.');
+    }
 
     if (!data.creditCardHolderInfo) {
       throw new BadRequestException(
