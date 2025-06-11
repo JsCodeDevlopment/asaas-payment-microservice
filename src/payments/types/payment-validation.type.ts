@@ -3,7 +3,6 @@ export interface BasePaymentValidation {
   value?: number;
   totalValue?: number;
   dueDate?: string;
-  remoteIp?: string;
 }
 
 export interface CreditCardValidation extends BasePaymentValidation {
@@ -18,4 +17,5 @@ export interface CreditCardValidation extends BasePaymentValidation {
   encryptedCreditCard?: {
     encryptedData: string;
   };
+  remoteIp?: string;
 }
