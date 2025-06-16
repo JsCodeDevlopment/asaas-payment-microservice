@@ -1,132 +1,318 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pagamentos - Gateway de Pagamentos Asaas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
     <style>
-        .endpoint {
-            border-left: 4px solid #0d6efd;
-            padding-left: 1rem;
-            margin-bottom: 2rem;
-        }
-        .method {
-            font-weight: bold;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            color: white;
-        }
-        .get { background-color: #0d6efd; }
-        .post { background-color: #198754; }
-        .put { background-color: #fd7e14; }
-        .patch { background-color: #6f42c1; }
-        .delete { background-color: #dc3545; }
-        .required { color: #dc3545; }
-        .optional { color: #6c757d; }
-        .nav-link.active {
-            background-color: #0d6efd !important;
-            color: white !important;
-        }
-        .nav-link {
-            color: #0d6efd;
-        }
-        .nav-link:hover {
-            background-color: #e9ecef;
-        }
-        pre {
-            background-color: #f8f9fa;
-            padding: 1rem;
-            border-radius: 0.25rem;
-        }
-        .environment-badge {
-            font-size: 0.8rem;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            margin-left: 0.5rem;
-        }
-        .sandbox { background-color: #ffc107; color: #000; }
-        .prod { background-color: #198754; color: #fff; }
+      .endpoint {
+        border-left: 4px solid #0d6efd;
+        padding-left: 1rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease-in-out;
+      }
+      .endpoint:hover {
+        border-left-color: #0b5ed7;
+        background-color: #f8f9fa;
+        padding-left: 1.5rem;
+      }
+      .method {
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        color: white;
+      }
+      .get {
+        background-color: #0d6efd;
+      }
+      .post {
+        background-color: #198754;
+      }
+      .put {
+        background-color: #fd7e14;
+      }
+      .patch {
+        background-color: #6f42c1;
+      }
+      .delete {
+        background-color: #dc3545;
+      }
+      .required {
+        color: #dc3545;
+      }
+      .optional {
+        color: #6c757d;
+      }
+      .nav-link.active {
+        background-color: #0d6efd !important;
+        color: white !important;
+      }
+      .nav-link {
+        color: #0d6efd;
+      }
+      .nav-link:hover {
+        background-color: #e9ecef;
+      }
+      pre {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.25rem;
+      }
+      .environment-badge {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        margin-left: 0.5rem;
+      }
+      .sandbox {
+        background-color: #ffc107;
+        color: #000;
+      }
+      .prod {
+        background-color: #198754;
+        color: #fff;
+      }
+
+      /* Estilos para os dropdowns */
+      .request-details {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        transition: all 0.3s ease-in-out;
+      }
+
+      .btn-group .btn {
+        margin-left: 0.25rem;
+      }
+
+      .btn-group .btn:first-child {
+        margin-left: 0;
+      }
+
+      /* Estilo para links do índice */
+      .list-unstyled a {
+        color: #0d6efd;
+        transition: color 0.2s ease-in-out;
+      }
+
+      .list-unstyled a:hover {
+        color: #0b5ed7;
+        text-decoration: underline !important;
+      }
+
+      /* Animação para os ícones */
+      .bi-chevron-down,
+      .bi-chevron-up {
+        transition: transform 0.2s ease-in-out;
+      }
+
+      /* Destaque para o endpoint ativo */
+      .endpoint.active {
+        border-left-color: #198754;
+        background-color: #f0f8f0;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse" style="min-height: 100vh;">
-                <div class="position-sticky pt-3">
-                    <h5 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
-                        <span>Documentação da API</span>
-                    </h5>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="introduction.html">
-                                <i class="bi bi-info-circle"></i> Introdução
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="authentication.html">
-                                <i class="bi bi-shield-lock"></i> Autenticação
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="access-tokens.html">
-                                <i class="bi bi-key"></i> Access Tokens
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="customers.html">
-                                <i class="bi bi-people"></i> Clientes
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="payments.html">
-                                <i class="bi bi-credit-card"></i> Pagamentos
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="payment-links.html">
-                                <i class="bi bi-link"></i> Links de Pagamento
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="notifications.html">
-                                <i class="bi bi-bell"></i> Notificações
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admin.html">
-                                <i class="bi bi-gear"></i> Interface Admin
-                            </a>
-                        </li>
-                    </ul>
+      <div class="row">
+        <!-- Sidebar -->
+        <nav
+          class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+          style="min-height: 100vh"
+        >
+          <div class="position-sticky pt-3">
+            <h5 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
+              <span>Documentação da API</span>
+            </h5>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="introduction.html">
+                  <i class="bi bi-info-circle"></i> Introdução
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="authentication.html">
+                  <i class="bi bi-shield-lock"></i> Autenticação
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="access-tokens.html">
+                  <i class="bi bi-key"></i> Access Tokens
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="customers.html">
+                  <i class="bi bi-people"></i> Clientes
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="payments.html">
+                  <i class="bi bi-credit-card"></i> Pagamentos
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="payment-links.html">
+                  <i class="bi bi-link"></i> Links de Pagamento
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="notifications.html">
+                  <i class="bi bi-bell"></i> Notificações
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="admin.html">
+                  <i class="bi bi-gear"></i> Interface Admin
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <!-- Main content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+          <h1>Pagamentos</h1>
+          <p class="lead">
+            Gerencie pagamentos e cobranças através do gateway Asaas
+          </p>
+
+          <section class="mb-5">
+            <h2>Endpoints</h2>
+
+            <!-- Índice de Endpoints -->
+            <div class="card mb-4">
+              <div
+                class="card-header d-flex justify-content-between align-items-center"
+              >
+                <h5 class="mb-0">
+                  <i class="bi bi-list-ul"></i> Índice de Endpoints
+                </h5>
+                <div class="btn-group" role="group">
+                  <button
+                    type="button"
+                    class="btn btn-outline-success btn-sm"
+                    onclick="toggleAllDetails('expand')"
+                  >
+                    <i class="bi bi-chevron-down"></i> Expandir Todos
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-sm"
+                    onclick="toggleAllDetails('collapse')"
+                  >
+                    <i class="bi bi-chevron-up"></i> Colapsar Todos
+                  </button>
                 </div>
-            </nav>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <h6>Pagamentos</h6>
+                    <ul class="list-unstyled">
+                      <li>
+                        <a href="#get-payments" class="text-decoration-none"
+                          ><i class="bi bi-arrow-right"></i> GET
+                          /api/payments</a
+                        >
+                      </li>
+                      <li>
+                        <a href="#post-payments" class="text-decoration-none"
+                          ><i class="bi bi-arrow-right"></i> POST
+                          /api/payments</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="#get-payment-by-id"
+                          class="text-decoration-none"
+                          ><i class="bi bi-arrow-right"></i> GET
+                          /api/payments/:id</a
+                        >
+                      </li>
+                      <li>
+                        <a
+                          href="#get-payments-by-customer"
+                          class="text-decoration-none"
+                          ><i class="bi bi-arrow-right"></i> GET
+                          /api/payments/customer/:customerId</a
+                        >
+                      </li>
+                      <li>
+                        <a href="#delete-payment" class="text-decoration-none"
+                          ><i class="bi bi-arrow-right"></i> DELETE
+                          /api/payments/:id</a
+                        >
+                      </li>
+                      <li>
+                        <a href="#refund-payment" class="text-decoration-none"
+                          ><i class="bi bi-arrow-right"></i> POST
+                          /api/payments/:id/refund</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-md-6">
+                    <h6>Cartão de Crédito</h6>
+                    <ul class="list-unstyled">
+                      <li>
+                        <a
+                          href="#secure-credit-card"
+                          class="text-decoration-none"
+                          ><i class="bi bi-arrow-right"></i> POST
+                          /api/payments/secure/credit-card</a
+                        >
+                      </li>
+                      <li>
+                        <a href="#public-key" class="text-decoration-none"
+                          ><i class="bi bi-arrow-right"></i> GET
+                          /api/payments/public-key</a
+                        >
+                      </li>
+                    </ul>
+                    <h6 class="mt-3">Implementação</h6>
+                    <ul class="list-unstyled">
+                      <li>
+                        <a
+                          href="#encryption-implementation"
+                          class="text-decoration-none"
+                          ><i class="bi bi-code-slash"></i> Service de
+                          Criptografia</a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <!-- Main content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
-                <h1>Pagamentos</h1>
-                <p class="lead">Gerencie pagamentos e cobranças através do gateway Asaas</p>
+            <div class="endpoint" id="get-payments">
+              <h4>
+                <span class="method get">GET</span>
+                <code>/api/payments</code>
+              </h4>
+              <p>Lista todos os pagamentos cadastrados.</p>
 
-                <section class="mb-5">
-                    <h2>Endpoints</h2>
-
-                    <div class="endpoint">
-                        <h4>
-                            <span class="method get">GET</span>
-                            <code>/api/payments</code>
-                        </h4>
-                        <p>Lista todos os pagamentos cadastrados.</p>
-                        <h5>Parâmetros de Query</h5>
-                        <pre><code>{
+              <div class="request-details" style="display: none">
+                <h5>Parâmetros de Query</h5>
+                <pre><code>{
   "customerId": "string",    // ID do cliente (opcional)
   "status": "string",        // Status do pagamento (opcional)
   "offset": number,          // Registros a pular (opcional, padrão: 0)
   "limit": number           // Máximo de registros (opcional, padrão: 10)
 }</code></pre>
-                        <h5>Resposta</h5>
-                        <pre><code>[
+                <h5>Resposta</h5>
+                <pre><code>[
   {
     "id": "string",
     "customerId": "string",
@@ -143,21 +329,40 @@
     "updatedAt": "string"
   }
 ]</code></pre>
-                    </div>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm mt-2"
+                onclick="toggleRequestDetails(this)"
+              >
+                <i class="bi bi-chevron-down"></i> Ver detalhes
+              </button>
+            </div>
 
-                    <div class="endpoint">
-                        <h4>
-                            <span class="method post">POST</span>
-                            <code>/api/payments</code>
-                        </h4>
-                        <p>Cria um novo pagamento.</p>
-                        <h5>Request Body</h5>
-                        <pre><code>{
+            <div class="endpoint" id="post-payments">
+              <h4>
+                <span class="method post">POST</span>
+                <code>/api/payments</code>
+              </h4>
+              <p>
+                Cria um novo pagamento
+                <strong>apenas para BOLETO e PIX</strong>.
+              </p>
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                <strong>Importante:</strong> Esta rota é destinada
+                exclusivamente para pagamentos via BOLETO e PIX. Para pagamentos
+                com cartão de crédito, utilize a rota
+                <code>/api/payments/secure/credit-card</code>.
+              </div>
+
+              <div class="request-details" style="display: none">
+                <h5>Request Body</h5>
+                <pre><code>{
   "customerId": "string",           // ID do cliente
   "value": number,                  // Valor do pagamento
   "dueDate": "string",             // Data de vencimento (YYYY-MM-DD)
   "description": "string",         // Descrição do pagamento
-  "billingType": "string",         // Tipo de cobrança (BOLETO, CREDIT_CARD, PIX)
+  "billingType": "string",         // Tipo de cobrança (BOLETO, PIX)
   "externalReference": "string",   // Referência externa (opcional)
   "installmentDescription": "string", // Descrição da parcela (opcional)
   "installmentValue": number,      // Valor da parcela (opcional)
@@ -175,129 +380,707 @@
     "type": "string"            // Tipo (FIXED ou PERCENTAGE)
   }
 }</code></pre>
-                        <h5>Exemplo</h5>
-                        <pre><code>curl -X POST "http://seu-servidor/api/payments" \
+                <h5>Exemplo</h5>
+                <pre><code>curl -X POST "http://seu-servidor/api/payments" \
   -H "Content-Type: application/json" \
   -d '{
     "customerId": "cus_123",
     "value": 100.00,
     "dueDate": "2024-03-15",
     "description": "Pagamento de serviço",
-    "billingType": "BOLETO",
-    "externalReference": "REF_001",
-    "discount": {
-      "value": 10.00,
-      "dueDateLimitDays": 5
-    },
-    "fine": {
-      "value": 2.00,
-      "type": "PERCENTAGE"
-    },
-    "interest": {
-      "value": 1.00,
-      "type": "PERCENTAGE"
-    }
+    "billingType": "PIX",
+    "externalReference": "REF_001"
   }'</code></pre>
-                    </div>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm mt-2"
+                onclick="toggleRequestDetails(this)"
+              >
+                <i class="bi bi-chevron-down"></i> Ver detalhes
+              </button>
+            </div>
 
-                    <div class="endpoint">
-                        <h4>
-                            <span class="method get">GET</span>
-                            <code>/api/payments/:id</code>
-                        </h4>
-                        <p>Obtém detalhes de um pagamento específico.</p>
-                        <h5>Exemplo</h5>
-                        <pre><code>curl -X GET "http://seu-servidor/api/payments/123"</code></pre>
-                    </div>
+            <div class="endpoint" id="get-payment-by-id">
+              <h4>
+                <span class="method get">GET</span>
+                <code>/api/payments/:id</code>
+              </h4>
+              <p>Obtém detalhes de um pagamento específico.</p>
 
-                    <div class="endpoint">
-                        <h4>
-                            <span class="method get">GET</span>
-                            <code>/api/payments/customer/:customerId</code>
-                        </h4>
-                        <p>Lista pagamentos de um cliente específico.</p>
-                        <h5>Exemplo</h5>
-                        <pre><code>curl -X GET "http://seu-servidor/api/payments/customer/cus_123"</code></pre>
-                    </div>
+              <div class="request-details" style="display: none">
+                <h5>Exemplo</h5>
+                <pre><code>curl -X GET "http://seu-servidor/api/payments/123"</code></pre>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm mt-2"
+                onclick="toggleRequestDetails(this)"
+              >
+                <i class="bi bi-chevron-down"></i> Ver detalhes
+              </button>
+            </div>
 
-                    <div class="endpoint">
-                        <h4>
-                            <span class="method delete">DELETE</span>
-                            <code>/api/payments/:id</code>
-                        </h4>
-                        <p>Remove um pagamento.</p>
-                        <h5>Exemplo</h5>
-                        <pre><code>curl -X DELETE "http://seu-servidor/api/payments/123"</code></pre>
-                    </div>
+            <div class="endpoint" id="get-payments-by-customer">
+              <h4>
+                <span class="method get">GET</span>
+                <code>/api/payments/customer/:customerId</code>
+              </h4>
+              <p>Lista pagamentos de um cliente específico.</p>
 
-                    <div class="endpoint">
-                        <h4>
-                            <span class="method post">POST</span>
-                            <code>/api/payments/:id/refund</code>
-                        </h4>
-                        <p>Estorna um pagamento.</p>
-                        <h5>Request Body</h5>
-                        <pre><code>{
+              <div class="request-details" style="display: none">
+                <h5>Exemplo</h5>
+                <pre><code>curl -X GET "http://seu-servidor/api/payments/customer/cus_123"</code></pre>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm mt-2"
+                onclick="toggleRequestDetails(this)"
+              >
+                <i class="bi bi-chevron-down"></i> Ver detalhes
+              </button>
+            </div>
+
+            <div class="endpoint" id="delete-payment">
+              <h4>
+                <span class="method delete">DELETE</span>
+                <code>/api/payments/:id</code>
+              </h4>
+              <p>Remove um pagamento.</p>
+
+              <div class="request-details" style="display: none">
+                <h5>Exemplo</h5>
+                <pre><code>curl -X DELETE "http://seu-servidor/api/payments/123"</code></pre>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm mt-2"
+                onclick="toggleRequestDetails(this)"
+              >
+                <i class="bi bi-chevron-down"></i> Ver detalhes
+              </button>
+            </div>
+
+            <div class="endpoint" id="refund-payment">
+              <h4>
+                <span class="method post">POST</span>
+                <code>/api/payments/:id/refund</code>
+              </h4>
+              <p>Estorna um pagamento.</p>
+
+              <div class="request-details" style="display: none">
+                <h5>Request Body</h5>
+                <pre><code>{
   "value": number,           // Valor do estorno (opcional, padrão: valor total)
   "description": "string"   // Descrição do estorno (opcional)
 }</code></pre>
-                        <h5>Exemplo</h5>
-                        <pre><code>curl -X POST "http://seu-servidor/api/payments/123/refund" \
+                <h5>Exemplo</h5>
+                <pre><code>curl -X POST "http://seu-servidor/api/payments/123/refund" \
   -H "Content-Type: application/json" \
   -d '{
     "value": 50.00,
     "description": "Estorno parcial"
   }'</code></pre>
-                    </div>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm mt-2"
+                onclick="toggleRequestDetails(this)"
+              >
+                <i class="bi bi-chevron-down"></i> Ver detalhes
+              </button>
+            </div>
 
-                    <div class="alert alert-info">
-                        <h5><i class="bi bi-info-circle"></i> Tipos de Cobrança</h5>
-                        <ul class="mb-0">
-                            <li><code>BOLETO</code>: Gera um boleto bancário</li>
-                            <li><code>CREDIT_CARD</code>: Cobrança via cartão de crédito</li>
-                            <li><code>PIX</code>: Gera um QR Code PIX</li>
-                        </ul>
-                    </div>
+            <div class="endpoint" id="secure-credit-card">
+              <h4>
+                <span class="method post">POST</span>
+                <code>/api/payments/secure/credit-card</code>
+              </h4>
+              <p>
+                Cria um novo pagamento com cartão de crédito usando
+                <strong>dados criptografados</strong> para maior segurança.
+              </p>
+              <div class="alert alert-success">
+                <i class="bi bi-shield-check"></i>
+                <strong>Recomendado:</strong> Esta é a rota mais segura para
+                pagamentos com cartão de crédito, pois os dados sensíveis são
+                criptografados.
+              </div>
 
-                    <div class="alert alert-info">
-                        <h5><i class="bi bi-info-circle"></i> Status de Pagamento</h5>
-                        <ul class="mb-0">
-                            <li><code>PENDING</code>: Aguardando pagamento</li>
-                            <li><code>CONFIRMED</code>: Pagamento confirmado</li>
-                            <li><code>OVERDUE</code>: Pagamento vencido</li>
-                            <li><code>REFUNDED</code>: Pagamento estornado</li>
-                            <li><code>CANCELED</code>: Pagamento cancelado</li>
-                        </ul>
-                    </div>
+              <div class="request-details" style="display: none">
+                <h5>Fluxo de Segurança</h5>
+                <ol>
+                  <li>
+                    Obtenha a chave pública via
+                    <code>GET /api/payments/public-key</code>
+                  </li>
+                  <li>
+                    Criptografe os dados sensíveis do cartão (número e CCV)
+                    usando a chave pública
+                  </li>
+                  <li>Envie os dados criptografados nesta rota</li>
+                </ol>
 
-                    <div class="alert alert-warning">
-                        <h5><i class="bi bi-exclamation-triangle"></i> Boas Práticas</h5>
-                        <ul class="mb-0">
-                            <li>Use o campo <code>externalReference</code> para referência do seu sistema</li>
-                            <li>Configure descontos, multas e juros conforme sua política</li>
-                            <li>Monitore os status dos pagamentos para ações automáticas</li>
-                            <li>Mantenha os dados do cliente atualizados para emissão de boletos</li>
-                            <li>Utilize o sistema de parcelas para cobranças recorrentes</li>
-                        </ul>
-                    </div>
-                </section>
-            </main>
-        </div>
+                <h5>Request Body</h5>
+                <pre><code>{
+  "customer": "string",           // ID do cliente
+  "value": number,                // Valor da parcela individual
+  "dueDate": "string",           // Data de vencimento (YYYY-MM-DD)
+  "installmentCount": number,    // Número de parcelas (opcional)
+  "totalValue": number,          // Valor total para parcelamento (opcional)
+  "encryptedCreditCard": {
+    "encryptedData": "string"    // Dados criptografados (número + CCV)
+  },
+  "creditCard": {
+    "holderName": "string",      // Nome impresso no cartão
+    "expiryMonth": "string",     // Mês de expiração (MM)
+    "expiryYear": "string"       // Ano de expiração (YYYY)
+  },
+  "creditCardHolderInfo": {
+    "name": "string",            // Nome completo do titular
+    "email": "string",           // Email do titular
+    "cpfCnpj": "string",         // CPF/CNPJ do titular
+    "postalCode": "string",      // CEP
+    "addressNumber": "string",   // Número do endereço
+    "addressComplement": "string", // Complemento (opcional)
+    "phone": "string",           // Telefone com DDD
+    "mobilePhone": "string"      // Celular (opcional)
+  },
+  "remoteIp": "string"           // IP do cliente (obrigatório)
+}</code></pre>
+
+                <h5>Exemplo cURL</h5>
+                <pre><code>curl -X POST "http://seu-servidor/api/payments/secure/credit-card" \
+  -H "Content-Type: application/json" \
+  -H "access_token: seu_token_aqui" \
+  -d '{
+    "customer": "cus_000006671674",
+    "value": 0,
+    "dueDate": "2025-05-01",
+    "installmentCount": 2,
+    "totalValue": 100,
+    "encryptedCreditCard": {
+      "encryptedData": "base64_encrypted_string_here"
+    },
+    "creditCard": {
+      "holderName": "John Doe",
+      "expiryMonth": "04",
+      "expiryYear": "2025"
+    },
+    "creditCardHolderInfo": {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "cpfCnpj": "12345678901",
+      "postalCode": "12345678",
+      "addressNumber": "123",
+      "phone": "11987654321"
+    },
+    "remoteIp": "127.0.0.1"
+  }'</code></pre>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm mt-2"
+                onclick="toggleRequestDetails(this)"
+              >
+                <i class="bi bi-chevron-down"></i> Ver detalhes
+              </button>
+            </div>
+
+            <div class="endpoint" id="public-key">
+              <h4>
+                <span class="method get">GET</span>
+                <code>/api/payments/public-key</code>
+              </h4>
+              <p>
+                Obtém a chave pública para criptografia dos dados do cartão de
+                crédito.
+              </p>
+              <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                <strong>Uso:</strong> Esta chave deve ser usada para
+                criptografar os dados sensíveis do cartão antes de enviá-los
+                para a rota <code>/api/payments/secure/credit-card</code>.
+              </div>
+
+              <div class="request-details" style="display: none">
+                <h5>Exemplo</h5>
+                <pre><code>curl -X GET "http://seu-servidor/api/payments/public-key"</code></pre>
+                <h5>Resposta</h5>
+                <pre><code>-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA...
+-----END PUBLIC KEY-----</code></pre>
+              </div>
+              <button
+                class="btn btn-outline-primary btn-sm mt-2"
+                onclick="toggleRequestDetails(this)"
+              >
+                <i class="bi bi-chevron-down"></i> Ver detalhes
+              </button>
+            </div>
+
+            <div class="alert alert-info">
+              <h5>
+                <i class="bi bi-info-circle"></i> Tipos de Cobrança e Rotas
+              </h5>
+              <div class="row">
+                <div class="col-md-6">
+                  <h6>BOLETO e PIX</h6>
+                  <ul class="mb-0">
+                    <li>
+                      <code>POST /api/payments</code> - Rota padrão para BOLETO
+                      e PIX
+                    </li>
+                    <li>Suporta descontos, multas e juros</li>
+                    <li>Ideal para cobranças com vencimento</li>
+                  </ul>
+                </div>
+                <div class="col-md-6">
+                  <h6>Cartão de Crédito</h6>
+                  <ul class="mb-0">
+                    <li>
+                      <code>POST /api/payments/secure/credit-card</code> - Rota
+                      segura com criptografia
+                    </li>
+                    <li>Suporta parcelamento</li>
+                    <li>Requer dados do titular do cartão</li>
+                    <li>Dados sensíveis criptografados</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <h5><i class="bi bi-info-circle"></i> Status de Pagamento</h5>
+              <ul class="mb-0">
+                <li><code>PENDING</code>: Aguardando pagamento</li>
+                <li><code>CONFIRMED</code>: Pagamento confirmado</li>
+                <li><code>OVERDUE</code>: Pagamento vencido</li>
+                <li><code>REFUNDED</code>: Pagamento estornado</li>
+                <li><code>CANCELED</code>: Pagamento cancelado</li>
+              </ul>
+            </div>
+
+            <div class="alert alert-warning">
+              <h5><i class="bi bi-exclamation-triangle"></i> Boas Práticas</h5>
+              <ul class="mb-0">
+                <li>
+                  <strong>BOLETO e PIX:</strong> Use a rota
+                  <code>POST /api/payments</code> com o campo
+                  <code>billingType</code> apropriado
+                </li>
+                <li>
+                  <strong>Cartão de Crédito:</strong> Use
+                  <code>POST /api/payments/secure/credit-card</code> para máxima
+                  segurança
+                </li>
+                <li>
+                  Use o campo <code>externalReference</code> para referência do
+                  seu sistema
+                </li>
+                <li>
+                  Configure descontos, multas e juros conforme sua política
+                  (apenas para BOLETO)
+                </li>
+                <li>
+                  Monitore os status dos pagamentos para ações automáticas
+                </li>
+                <li>
+                  Mantenha os dados do cliente atualizados para emissão de
+                  boletos
+                </li>
+                <li>
+                  Para cartão de crédito, sempre informe o
+                  <code>remoteIp</code> do cliente
+                </li>
+                <li>
+                  Utilize a rota segura para maior proteção dos dados sensíveis
+                  do cartão
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <!-- Seção de Implementação de Criptografia -->
+          <section class="mb-5" id="encryption-implementation">
+            <h2>Implementação de Criptografia</h2>
+            <p class="lead">
+              Service para criptografar dados sensíveis do cartão de crédito no
+              frontend
+            </p>
+
+            <div class="card">
+              <div
+                class="card-header d-flex justify-content-between align-items-center"
+              >
+                <h5 class="mb-0">
+                  <i class="bi bi-shield-lock"></i>
+                  Service de Criptografia (Frontend)
+                </h5>
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  onclick="copyToClipboard('encryption-service')"
+                >
+                  <i class="bi bi-clipboard"></i> Copiar Código
+                </button>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-info">
+                  <i class="bi bi-info-circle"></i>
+                  <strong>Como usar:</strong> Este service deve ser usado no
+                  frontend para criptografar os dados sensíveis do cartão
+                  (número e CCV) antes de enviar para a API.
+                </div>
+
+                <pre><code>// api.ts
+const tokenApi = axios.create({
+  baseURL: import.meta.env.VITE_GATEWAY_URL,
+});
+
+const gatewayApi = axios.create({
+  baseURL: import.meta.env.VITE_GATEWAY_URL,
+});
+
+export const GATEWAY_ENVIRONMENT = (import.meta.env.VITE_GATEWAY_ENVIRONMENT ||
+  "SANDBOX") as "SANDBOX" | "PROD";
+
+gatewayApi.interceptors.request.use(async (config) => {
+  const clientId = import.meta.env.VITE_CLIENT_ID;
+
+  const response = await tokenApi.get<{ accessToken: string }>(
+    `/access-tokens/client/${clientId}`,
+    {
+      params: { enviroment: GATEWAY_ENVIRONMENT },
+    }
+  );
+
+  config.headers["Content-Type"] = "application/json";
+  config.headers["access_token"] = response.data.accessToken;
+  return config;
+});
+
+export { gatewayApi };
+                
+                </code></pre>
+
+                <pre id="encryption-service"><code>// encrypt-payment.ts
+import { gatewayApi } from "./api";
+
+class EncryptionService {
+  private publicKey: string | null = null;
+
+  async loadPublicKey(): Promise&lt;void&gt; {
+    if (this.publicKey) return;
+
+    try {
+      const response = await gatewayApi.get&lt;string&gt;("/payments/public-key");
+
+      if (!response.data) {
+        throw new Error("Failed to load public key");
+      }
+
+      // Remover cabeçalho e rodapé da chave se existirem
+      let key = response.data
+        .replace("-----BEGIN PUBLIC KEY-----", "")
+        .replace("-----END PUBLIC KEY-----", "")
+        .replace(/\s/g, "");
+
+      // Verificar se a chave está em formato base64 válido
+      try {
+        // Tentar decodificar a chave para verificar se é base64 válido
+        this.publicKey = key;
+      } catch (e) {
+        throw new Error("Invalid public key format");
+      }
+    } catch (error) {
+      console.error("Error loading public key:", error);
+      throw error;
+    }
+  }
+
+  async encrypt(data: string): Promise&lt;string&gt; {
+    if (!this.publicKey) {
+      await this.loadPublicKey();
+    }
+
+    const encoder = new TextEncoder();
+    const encodedData = encoder.encode(data);
+
+    try {
+      // Importar a chave pública
+      const importedKey = await window.crypto.subtle.importKey(
+        "spki",
+        this.base64ToArrayBuffer(this.publicKey!),
+        {
+          name: "RSA-OAEP",
+          hash: "SHA-256",
+        },
+        false,
+        ["encrypt"]
+      );
+
+      // Criptografar os dados
+      const encrypted = await window.crypto.subtle.encrypt(
+        {
+          name: "RSA-OAEP",
+        },
+        importedKey,
+        encodedData
+      );
+
+      // Converter para base64
+      const result = btoa(String.fromCharCode(...new Uint8Array(encrypted)));
+      return result;
+    } catch (error) {
+      console.error("Erro durante a criptografia:", error);
+      throw error;
+    }
+  }
+
+  private base64ToArrayBuffer(base64: string): ArrayBuffer {
+    try {
+      const binaryString = atob(base64);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i &lt; binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      return bytes.buffer;
+    } catch (error) {
+      console.error("Erro ao converter base64 para ArrayBuffer:", error);
+      throw error;
+    }
+  }
+}
+
+export default new EncryptionService();</code></pre>
+              </div>
+            </div>
+
+            <div class="card mt-4">
+              <div
+                class="card-header d-flex justify-content-between align-items-center"
+              >
+                <h5 class="mb-0">
+                  <i class="bi bi-code-slash"></i>
+                  Exemplo de Uso
+                </h5>
+                <button
+                  class="btn btn-outline-primary btn-sm"
+                  onclick="copyToClipboard('usage-example')"
+                >
+                  <i class="bi bi-clipboard"></i> Copiar Código
+                </button>
+              </div>
+              <div class="card-body">
+                <pre id="usage-example"><code>// Exemplo de como usar o service
+import encryptService from './services/encrypt-payment';
+
+async function processCreditCardPayment(paymentData) {
+  try {
+    // Dados sensíveis do cartão
+    const sensitiveData = {
+      number: "4242424242424242",
+      ccv: "123"
+    };
+
+    // Criptografar dados sensíveis
+    const encryptedData = await encryptService.encrypt(
+      JSON.stringify(sensitiveData)
+    );
+
+    // Preparar payload para a API
+    const payload = {
+      customer: "cus_000006671674",
+      value: 0,
+      dueDate: "2025-05-01",
+      installmentCount: 2,
+      totalValue: 100,
+      encryptedCreditCard: {
+        encryptedData: encryptedData
+      },
+      creditCard: {
+        holderName: "John Doe",
+        expiryMonth: "04",
+        expiryYear: "2025"
+      },
+      creditCardHolderInfo: {
+        name: "John Doe",
+        email: "john.doe@example.com",
+        cpfCnpj: "12345678901",
+        postalCode: "12345678",
+        addressNumber: "123",
+        phone: "11987654321"
+      },
+      remoteIp: "127.0.0.1"
+    };
+
+    // Enviar para a API
+    const response = await fetch('/api/payments/secure/credit-card', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'access_token': 'seu_token_aqui'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error('Erro no processamento:', error);
+    throw error;
+  }
+}</code></pre>
+              </div>
+            </div>
+
+            <div class="alert alert-warning mt-4">
+              <h5>
+                <i class="bi bi-shield-exclamation"></i> Boas Práticas de
+                Segurança
+              </h5>
+              <ul class="mb-0">
+                <li>
+                  <strong>Sempre use HTTPS</strong> em produção para transmissão
+                  segura
+                </li>
+                <li>
+                  <strong>Nunca armazene</strong> dados sensíveis do cartão no
+                  frontend
+                </li>
+                <li>
+                  <strong>Criptografe apenas</strong> os dados necessários
+                  (número e CCV)
+                </li>
+                <li><strong>Valide os dados</strong> antes da criptografia</li>
+                <li>
+                  <strong>Use a chave pública</strong> apenas para criptografia,
+                  nunca para descriptografia
+                </li>
+                <li>
+                  <strong>Implemente rate limiting</strong> para evitar ataques
+                  de força bruta
+                </li>
+                <li>
+                  <strong>Monitore logs</strong> para detectar tentativas de
+                  fraude
+                </li>
+                <li>
+                  <strong>Mantenha as dependências</strong> atualizadas para
+                  evitar vulnerabilidades
+                </li>
+              </ul>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Ativa o link da página atual
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPage = window.location.pathname.split('/').pop();
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            navLinks.forEach(link => {
-                if (link.getAttribute('href') === currentPage) {
-                    link.classList.add('active');
-                }
-            });
+      // Ativa o link da página atual
+      document.addEventListener('DOMContentLoaded', function () {
+        const currentPage = window.location.pathname.split('/').pop();
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach((link) => {
+          if (link.getAttribute('href') === currentPage) {
+            link.classList.add('active');
+          }
         });
+
+        // Scroll suave para links internos
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+            }
+          });
+        });
+      });
+
+      // Função para alternar a exibição dos detalhes dos requests
+      function toggleRequestDetails(button) {
+        const endpoint = button.closest('.endpoint');
+        const details = endpoint.querySelector('.request-details');
+        const icon = button.querySelector('i');
+
+        if (details.style.display === 'none' || details.style.display === '') {
+          details.style.display = 'block';
+          button.innerHTML =
+            '<i class="bi bi-chevron-up"></i> Esconder detalhes';
+          button.classList.remove('btn-outline-primary');
+          button.classList.add('btn-primary');
+
+          // Adiciona animação de fade-in
+          details.style.opacity = '0';
+          details.style.transition = 'opacity 0.3s ease-in-out';
+          setTimeout(() => {
+            details.style.opacity = '1';
+          }, 10);
+        } else {
+          details.style.opacity = '0';
+          setTimeout(() => {
+            details.style.display = 'none';
+          }, 300);
+          button.innerHTML = '<i class="bi bi-chevron-down"></i> Ver detalhes';
+          button.classList.remove('btn-primary');
+          button.classList.add('btn-outline-primary');
+        }
+      }
+
+      // Função para expandir/colapsar todos os detalhes
+      function toggleAllDetails(action) {
+        const buttons = document.querySelectorAll(
+          '.btn-outline-primary, .btn-primary',
+        );
+        buttons.forEach((button) => {
+          if (
+            button.textContent.includes('Ver detalhes') ||
+            button.textContent.includes('Esconder detalhes')
+          ) {
+            if (
+              action === 'expand' &&
+              button.textContent.includes('Ver detalhes')
+            ) {
+              toggleRequestDetails(button);
+            } else if (
+              action === 'collapse' &&
+              button.textContent.includes('Esconder detalhes')
+            ) {
+              toggleRequestDetails(button);
+            }
+          }
+        });
+      }
+
+      // Função para copiar código para a área de transferência
+      function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        const code = element.textContent;
+
+        navigator.clipboard
+          .writeText(code)
+          .then(() => {
+            // Mostrar feedback visual
+            const button = event.target.closest('button');
+            const originalText = button.innerHTML;
+
+            button.innerHTML = '<i class="bi bi-check"></i> Copiado!';
+            button.classList.remove('btn-outline-primary');
+            button.classList.add('btn-success');
+
+            setTimeout(() => {
+              button.innerHTML = originalText;
+              button.classList.remove('btn-success');
+              button.classList.add('btn-outline-primary');
+            }, 2000);
+          })
+          .catch((err) => {
+            console.error('Erro ao copiar: ', err);
+            alert(
+              'Erro ao copiar o código. Tente selecionar e copiar manualmente.',
+            );
+          });
+      }
     </script>
-</body>
+  </body>
 </html>
